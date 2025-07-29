@@ -9,17 +9,30 @@ class MainWindow(QMainWindow):
         # Default Screen
         self.router("home")
 
+#         self.setStyleSheet("""
+#     QWidget {
+#         background: qlineargradient(
+#             spread:pad,
+#             x1:0, y1:0,
+#             x2:1, y2:1,
+#             stop:0 #0f2a44,
+#             stop:1 #1a4d7a
+#         );
+#     }
+# """)
         self.setStyleSheet("""
     QWidget {
         background: qlineargradient(
             spread:pad,
             x1:0, y1:0,
             x2:1, y2:1,
-            stop:0 #0f2a44,
-            stop:1 #1a4d7a
+            stop:0 #3c7cb2,    /* Light blue that complements 'primary' */
+            stop:1 #6baed6     /* Even lighter tone for smooth transition */
         );
     }
 """)
+
+
 
     
     def router(self, screen_name : str):

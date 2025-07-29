@@ -16,6 +16,7 @@ class HeadingWidget(QWidget):
         font.setPointSize(24)
         # font.setBold(True)
         self.label.setFont(font)
+        self.setStyleSheet("color: white; background: transparent;")
 
 
         # Set alignment
