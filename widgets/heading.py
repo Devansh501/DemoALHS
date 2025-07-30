@@ -3,7 +3,13 @@ from PyQt5.QtGui import QFont
 from PyQt5.QtCore import Qt
 
 class HeadingWidget(QWidget):
-    def __init__(self, text, alignment='left', stretchable=False, parent=None):
+    SIZE_MAP = {
+        "large": 28,
+        "medium": 24,
+        "small": 18
+    }
+
+    def __init__(self, text, alignment='left', stretchable=False, size='large', parent=None):
         super().__init__(parent)
 
         self.setStyleSheet("background: transparent;")
@@ -13,7 +19,7 @@ class HeadingWidget(QWidget):
         
         self.label = QLabel(text)
         font = QFont()
-        font.setPointSize(24)
+        font.setPointSize(self.SIZE_MAP.get(size, 24))  # Default to medium size (24)
         # font.setBold(True)
         self.label.setFont(font)
         self.setStyleSheet("color: white; background: transparent;")

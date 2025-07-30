@@ -5,11 +5,10 @@ from typing import Union
 from widgets.virtual_keyboard import VirtualKeyboard
 
 
-
 class ThemedInputField(QWidget):
     SIZE_MAP = {
-        "large": {"size": QSize(160, 52), "font": 16},
-        "medium": {"size": QSize(120, 40), "font": 14},
+        "large": {"size": QSize(220, 52), "font": 16},
+        "medium": {"size": QSize(180, 40), "font": 14},
         "small": {"size": QSize(90, 30), "font": 12}
     }
 
@@ -22,7 +21,7 @@ class ThemedInputField(QWidget):
         "shadow": QColor(0, 0, 0, 110)
     }
 
-    def __init__(self, label_text="Label", placeholder="0", size="medium", numeric_only=True, parent=None):
+    def __init__(self, label_text: str = None, placeholder="0", size="medium", numeric_only=True, parent=None):
         super().__init__(parent)
 
         self.numeric_only = numeric_only
@@ -37,20 +36,24 @@ class ThemedInputField(QWidget):
         layout.setContentsMargins(8, 8, 8, 8)
         layout.setSpacing(6)
 
-        # Label
-        self.label = QLabel(label_text)
-        self.label.setStyleSheet(f"""
-            QLabel {{
-                color: {self.COLORS['text']};
-                font-size: {font_size - 2}px;
-                font-weight: 600;
-            }}
-        """)
+        # Label (optional)
+        self.label = None
+        if label_text:
+            self.label = QLabel(label_text)
+            self.label.setStyleSheet(f"""
+                QLabel {{
+                    color: {self.COLORS['text']};
+                    font-size: {font_size - 2}px;
+                    font-weight: 600;
+                    background: transparent;
+                }}
+            """)
+            layout.addWidget(self.label)
 
         # Line Edit
         self.line_edit = QLineEdit()
         self.line_edit.setPlaceholderText(placeholder)
-        self.line_edit.setAlignment(Qt.AlignRight)
+        self.line_edit.setAlignment(Qt.AlignLeft)
         self.line_edit.setText("")
         self.line_edit.setFixedSize(self.input_size)
 
@@ -89,7 +92,6 @@ class ThemedInputField(QWidget):
         shadow.setColor(self.COLORS["shadow"])
         self.setGraphicsEffect(shadow)
 
-        layout.addWidget(self.label)
         layout.addWidget(self.line_edit)
         self.setLayout(layout)
 
@@ -99,9 +101,8 @@ class ThemedInputField(QWidget):
         self.editingFinished = self.line_edit.editingFinished
         self.returnPressed = self.line_edit.returnPressed
 
-        # Allow external layouts to stretch this widget cleanly
-        self.setMinimumWidth(self.input_size.width())
-        self.setFixedHeight(self.input_size.height() + 28)
+        # Restrict auto-expansion
+        self.setFixedSize(self.input_size.width() + 16, self.input_size.height() + 28)
         self.line_edit.mousePressEvent = self.get_virtual_keyboard_callback(self.line_edit)
 
     def focusOutEvent(self, event):
@@ -144,11 +145,11 @@ class ThemedInputField(QWidget):
         self.line_edit.setPlaceholderText(text)
 
     def setLabel(self, text: str):
-        self.label.setText(text)
+        if self.label:
+            self.label.setText(text)
 
     def get_virtual_keyboard_callback(self, target_input):
         def callback(event):
             VirtualKeyboard.show_for(target_input)
             QLineEdit.mousePressEvent(target_input, event)
         return callback
-

@@ -50,5 +50,8 @@ class MainWindow(QMainWindow):
         elif screen_name == "multi_pipette_asp":
             from screens.multi_pipette_asp import MultiPipetteAsp
             self.current_screen = MultiPipetteAsp(self)
+        elif screen_name == "reagent_selector":
+            from screens.reagent_selector import ReagentSelector
+            self.current_screen = ReagentSelector(self)
         
         self.setCentralWidget(self.current_screen)

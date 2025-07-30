@@ -44,7 +44,7 @@ class SinglePipetteAsp(QWidget):
         playarea = QWidget()
         playarea.setStyleSheet("background: transparent;")
         playareaLayout = QHBoxLayout(playarea)
-        playareaLayout.setContentsMargins(25, 0, 25, 0)
+        # playareaLayout.setContentsMargins(25, 0, 25, 0)
 
         
         SinglePipetteAspGrid = ButtonGridWidget(8,12)
@@ -63,7 +63,7 @@ class SinglePipetteAsp(QWidget):
         aspirationOptionsWrapper = QWidget()
         aspirationOptionsWrapper.setStyleSheet("background: transparent;")
         aspirationOptionsWrapperLayout = QVBoxLayout(aspirationOptionsWrapper)
-        input_field = ThemedInputField("Volume (µL)", "e.g. 10.5",size='small')
+        input_field = ThemedInputField("Volume (µL)", "e.g. 10.5")
         input_field.line_edit.editingFinished.connect(lambda: print(f"lol: {input_field.text()} {type(input_field.text())}"))
 
         aspirationOptionsWrapperLayout.addWidget(input_field)
