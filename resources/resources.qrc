@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/fonts">
+        <file alias="michroma.ttf">fonts/Michroma-Regular.ttf</file>
+    </qresource>
+</RCC>
