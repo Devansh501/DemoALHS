@@ -1,73 +1,185 @@
-from PyQt5.QtWidgets import QWidget,QHBoxLayout,QLabel
-from PyQt5.QtGui import QFontDatabase,QFont
-from PyQt5.QtCore import QFile
-from widgets.button import ThemedButton
-from resources import resources
-
-
-# class HomeScreen(QWidget):
-#     def __init__(self, parentObj):
-#         super().__init__()
-#         font_id = QFontDatabase.addApplicationFont(":/fonts/michroma.ttf") # Use the path within the QRC file
-
-#         if font_id == -1:
-#             print("Font failed to load")
-#         else:
-#             families = QFontDatabase.applicationFontFamilies(font_id)
-#             print("Loaded font families:", families)
-        
-#         f = QFile(":/fonts/michroma.ttf")
-#         if f.exists():
-#             print("Font file exists in resource system ✅")
-#         else:
-#             print("Font file does NOT exist in resource system ❌")
-        
-#         font_id = QFontDatabase.addApplicationFont("../resources/fonts/Michroma-Regular.ttf")
-#         print("Font ID (file load):", font_id)
-
-
-#         self.setWindowTitle("Home")
-#         layout = QHBoxLayout()
-#         single_pipette_button = ThemedButton("Single Pipette",size="large")
-#         multi_pipette_button = ThemedButton("Multi Pipette",size="large")
-#         reagent_selector_button = ThemedButton("Reagent Selector",size="large")
-
-#         single_pipette_button.clicked.connect(lambda: parentObj.router("single_pipette_asp"))
-#         multi_pipette_button.clicked.connect(lambda: parentObj.router("multi_pipette_asp"))
-#         reagent_selector_button.clicked.connect(lambda: parentObj.router("reagent_selector"))
-        
-        
-#         layout.addWidget(single_pipette_button)
-#         layout.addWidget(multi_pipette_button)
-#         layout.addWidget(reagent_selector_button)
-#         self.setLayout(layout)
+from PyQt5.QtWidgets import  QWidget, QLabel, QVBoxLayout, QGridLayout, QHBoxLayout
+from PyQt5.QtCore import QPropertyAnimation, QEasingCurve, QRect
+from PyQt5.QtGui import QFont
+from widgets.icon_button import IconButton
+from widgets.heading import Heading
+from widgets.menu_button import MenuButton
+import sys
 
 class HomeScreen(QWidget):
-    def __init__(self, parentObj):
+    def __init__(self,parentObj):
         super().__init__()
 
-        from PyQt5.QtGui import QFont, QFontDatabase
+        # Container to hold both screens
+        self.container = QWidget(self)
 
-        font_id = QFontDatabase.addApplicationFont(":/fonts/michroma.ttf")
-        families = QFontDatabase.applicationFontFamilies(font_id)
-        label = QLabel("Hello with Custom Font!")
-        label.setFont(QFont(families[0], 20)) # Apply the font
+        # Screens
+        self.screen1 = self.create_screen("Screen 1", "#2196F3")
+        self.screen2 = self.create_screen("Screen 2", "#4CAF50")
+       
 
-
-        self.setWindowTitle("Home")
-        layout = QHBoxLayout()
-
-        single_pipette_button = ThemedButton("Single Pipette", size="large")
-        multi_pipette_button = ThemedButton("Multi Pipette", size="large")
-        reagent_selector_button = ThemedButton("0123456789", size="large")
+        # Add screens to container
+        self.screen1.setParent(self.container)
+        self.screen2.setParent(self.container)
 
 
-        single_pipette_button.clicked.connect(lambda: parentObj.router("single_pipette_asp"))
-        multi_pipette_button.clicked.connect(lambda: parentObj.router("multi_pipette_asp"))
-        reagent_selector_button.clicked.connect(lambda: parentObj.router("reagent_selector"))
+        # Screen1
+        screen1LayoutWrapper = QVBoxLayout(self.screen1)
+        screen1Heading = Heading("   Menu", font_size=28)
 
-        layout.addWidget(single_pipette_button)
-        layout.addWidget(multi_pipette_button)
-        layout.addWidget(reagent_selector_button)
-        layout.addWidget(label)
-        self.setLayout(layout)
+        screen1MainWidget = QWidget()
+        screen1GridLayout = QGridLayout(screen1MainWidget)
+
+        pipetteButton = MenuButton("Pipette")
+        labwareButton = MenuButton("Labware")
+        quickLoadButton = MenuButton("Quick Load")
+        newProtocolButton = MenuButton("New Protocol")
+
+        screen1GridLayout.addWidget(pipetteButton, 0, 0)
+        screen1GridLayout.addWidget(labwareButton, 0, 1)
+        screen1GridLayout.addWidget(quickLoadButton, 1, 0)
+        screen1GridLayout.addWidget(newProtocolButton, 1, 1)
+
+        screen1GridLayout.setSpacing(40)
+        screen1MainCover = QWidget()
+        screen1MainElementWrapper = QHBoxLayout(screen1MainCover)
+        screen1MainElementWrapper.addStretch()
+        screen1MainElementWrapper.addWidget(screen1MainWidget)
+        screen1MainElementWrapper.addStretch()
+
+        
+
+        screen1LayoutWrapper.addWidget(screen1Heading)
+        screen1LayoutWrapper.addStretch()
+        screen1LayoutWrapper.addWidget(screen1MainCover)
+        screen1LayoutWrapper.addStretch()
+
+
+
+        # Screen2
+        screen2LayoutWrapper = QVBoxLayout(self.screen2)
+        screen2Heading = Heading("   Menu", font_size=28)
+
+        screen2MainWidget = QWidget()
+        screen2GridLayout = QGridLayout(screen2MainWidget)
+
+        calibrationButton = MenuButton("Calibration",fontSize=17)
+        simulationButton = MenuButton("Simulation",fontSize=18)
+        settingsButton = MenuButton("Settings")
+        comingSoonButton = MenuButton("Coming Soon ...")
+
+        screen2GridLayout.addWidget(calibrationButton, 0, 0)
+        screen2GridLayout.addWidget(simulationButton, 0, 1)
+        screen2GridLayout.addWidget(settingsButton, 1, 0)
+        screen2GridLayout.addWidget(comingSoonButton, 1, 1)
+
+        screen2GridLayout.setSpacing(40)
+        screen2MainCover = QWidget()
+        screen2MainElementWrapper = QHBoxLayout(screen2MainCover)
+        screen2MainElementWrapper.addStretch()
+        screen2MainElementWrapper.addWidget(screen2MainWidget)
+        screen2MainElementWrapper.addStretch()
+
+        
+
+        screen2LayoutWrapper.addWidget(screen2Heading)
+        screen2LayoutWrapper.addStretch()
+        screen2LayoutWrapper.addWidget(screen2MainCover)
+        screen2LayoutWrapper.addStretch()
+
+        # # Buttons
+        self.button1 = IconButton(
+            icon_path=":/icons/rightArrow.png",
+            size="large",
+            primary_color="#ffffff",
+            hover_color="#c1dff7",
+            pressed_color="#C6CDD3",
+            parent=self.screen1
+        )
+        self.button1.clicked.connect(self.slide_next)
+
+
+        self.button2 = IconButton(
+            icon_path=":/icons/leftArrow.png",
+            size="large",
+            primary_color="#ffffff",
+            hover_color="#c1dff7",
+            pressed_color="#C6CDD3",
+            parent=self.screen2
+        )
+        self.button2.clicked.connect(self.slide_back)
+
+        # Keep animations alive
+        self.anim1 = None
+        self.anim2 = None
+
+    def create_screen(self, label, color):
+        screen = QWidget()
+        screen.setStyleSheet(f"background-color: transparent;")
+        return screen
+
+    def resizeEvent(self, event):
+        """Update layout and positions when window resizes."""
+        w, h = self.width(), self.height()
+
+        # Resize the container to fill this widget
+        self.container.setGeometry(0, 0, w, h)
+
+        # Position screens
+        self.screen1.setGeometry(0, 0, w, h)
+        self.screen2.setGeometry(w, 0, w, h)  # Off-screen to the right
+
+        # Position button1 at mid-right (on screen1)
+        self.button1.move(
+            w - self.button1.width() - 20,         # 20px from right edge
+            (h - self.button1.height()) // 2       # vertical center
+        )
+
+        # Position button2 at mid-left (on screen2)
+        self.button2.move(
+            20,                                     # 20px from left edge
+            (h - self.button2.height()) // 2       # vertical center
+        )
+
+        super().resizeEvent(event)
+
+
+    def slide_next(self):
+        w, h = self.width(), self.height()
+
+        anim1 = QPropertyAnimation(self.screen1, b"geometry")
+        anim1.setDuration(400)
+        anim1.setEasingCurve(QEasingCurve.InOutQuad)
+        anim1.setStartValue(QRect(0, 0, w, h))
+        anim1.setEndValue(QRect(-w, 0, w, h))
+
+        anim2 = QPropertyAnimation(self.screen2, b"geometry")
+        anim2.setDuration(400)
+        anim2.setEasingCurve(QEasingCurve.InOutQuad)
+        anim2.setStartValue(QRect(w, 0, w, h))
+        anim2.setEndValue(QRect(0, 0, w, h))
+
+        anim1.start()
+        anim2.start()
+        self.anim1 = anim1
+        self.anim2 = anim2
+
+    def slide_back(self):
+        w, h = self.width(), self.height()
+
+        anim1 = QPropertyAnimation(self.screen2, b"geometry")
+        anim1.setDuration(400)
+        anim1.setEasingCurve(QEasingCurve.InOutQuad)
+        anim1.setStartValue(QRect(0, 0, w, h))
+        anim1.setEndValue(QRect(w, 0, w, h))
+
+        anim2 = QPropertyAnimation(self.screen1, b"geometry")
+        anim2.setDuration(400)
+        anim2.setEasingCurve(QEasingCurve.InOutQuad)
+        anim2.setStartValue(QRect(-w, 0, w, h))
+        anim2.setEndValue(QRect(0, 0, w, h))
+
+        anim1.start()
+        anim2.start()
+        self.anim1 = anim1
+        self.anim2 = anim2
