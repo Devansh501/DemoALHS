@@ -21,7 +21,9 @@ class Heading(QLabel):
         """)
 
         font_name = FontManager.get_font("michroma")
-        self.setFont(QFont(font_name))
+        font = QFont(font_name)
+        self.setFont(font)
+        font.setLetterSpacing(QFont.AbsoluteSpacing, 1.5)
 
         # Allow expansion with layouts
         self.setMinimumHeight(font_size * 2)

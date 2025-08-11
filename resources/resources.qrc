@@ -1,8 +1,11 @@
 <RCC>
     
     <qresource prefix="/fonts">
-        <file alias="michroma.ttf">fonts/Michroma-Regular.ttf</file>
-        <file alias="lexendagiga.ttf">fonts/LexendGiga.ttf</file>
+        <file alias="michroma.ttf">fonts/michroma.ttf</file>
+        <file alias="lexend.ttf">fonts/lexend.ttf</file>\
+        <file alias="lexandMega.ttf">fonts/lexendMega.ttf</file>
+        <file alias="lexendGiga.ttf">fonts/lexendGiga.ttf</file>
+        <file alias="lexendPeta.ttf">fonts/lexendPeta.ttf</file>
     </qresource>
     
    

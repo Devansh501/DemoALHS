@@ -1,12 +1,14 @@
 import sys
 from PyQt5.QtWidgets import QWidget
-from PyQt5.QtCore import Qt, QTimer, QPropertyAnimation, pyqtProperty, QEasingCurve, QRectF
+from PyQt5.QtCore import Qt, QTimer, QPropertyAnimation, pyqtProperty, QEasingCurve, QRectF, pyqtSignal
 from PyQt5.QtGui import QColor, QFont, QPainter, QPainterPath, QBrush, QPen
 
 from utilities.fontManager import FontManager
 
 
 class MenuButton(QWidget):
+    clicked = pyqtSignal()  # ✅ Custom signal
+
     def __init__(self, text="", fontSize=22, parent=None):
         super().__init__(parent)
         self.setFixedSize(225, 198)
@@ -17,6 +19,7 @@ class MenuButton(QWidget):
 
         self._scale = 1.0
         self._shadowMode = "normal"  # "normal" or "pressed"
+        self._press_inside = False  # ✅ Track if press started inside
 
         self._scale_anim = QPropertyAnimation(self, b"scale")
         self._scale_anim.setDuration(100)
@@ -66,10 +69,10 @@ class MenuButton(QWidget):
 
     def _draw_normal_shadow(self, painter, rect, radius):
         """Strong shadow on bottom and right edges (resting)."""
-        layers = 14  # More layers = smoother, deeper
+        layers = 14
         for i in range(layers):
             offset = i + 1
-            alpha = int(120 * (1 - i / layers))  # Stronger alpha
+            alpha = int(80 * (1 - i / layers))  # softer shadow
             color = QColor(0, 0, 0, alpha)
 
             painter.setPen(Qt.NoPen)
@@ -78,13 +81,13 @@ class MenuButton(QWidget):
             path = QPainterPath()
             path.addRoundedRect(
                 QRectF(
-                    rect.left() + offset * 0.6,  # right offset
-                    rect.top() + offset * 0.6,   # bottom offset
+                    rect.left() + offset * 0.4,
+                    rect.top() + offset * 0.4,
                     rect.width(),
                     rect.height()
                 ),
-                radius + offset * 0.4,
-                radius + offset * 0.4
+                radius + offset * 0.3,
+                radius + offset * 0.3
             )
             painter.drawPath(path)
 
@@ -93,7 +96,7 @@ class MenuButton(QWidget):
         layers = 10
         for i in range(layers):
             offset = i + 1
-            alpha = int(110 * (1 - i / layers))  # Stronger opacity
+            alpha = int(80 * (1 - i / layers))  # match with normal
             color = QColor(0, 0, 0, alpha)
 
             painter.setPen(Qt.NoPen)
@@ -103,7 +106,7 @@ class MenuButton(QWidget):
             path.addRoundedRect(
                 QRectF(
                     rect.left(),
-                    rect.top() + offset * 0.9,  # bottom only
+                    rect.top() + offset * 0.6,
                     rect.width(),
                     rect.height()
                 ),
@@ -115,17 +118,21 @@ class MenuButton(QWidget):
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton and not self._click_locked:
             self._click_locked = True
+            self._press_inside = True
             self._animate_press()
         super().mousePressEvent(event)
 
     def mouseReleaseEvent(self, event):
         if event.button() == Qt.LeftButton:
+            if self._press_inside and self.rect().contains(event.pos()):
+                self.clicked.emit()  # ✅ Emit custom clicked signal
             self._animate_release()
             QTimer.singleShot(200, self._unlock_click)
         super().mouseReleaseEvent(event)
 
     def _unlock_click(self):
         self._click_locked = False
+        self._press_inside = False
 
     def _animate_press(self):
         self._scale_anim.stop()

@@ -1,6 +1,8 @@
-from PyQt5.QtWidgets import QPushButton
+from PyQt5.QtWidgets import QPushButton, QGraphicsDropShadowEffect
 from PyQt5.QtCore import QSize, Qt, QEvent
-from PyQt5.QtGui import QPainter, QColor, QFontMetrics, QLinearGradient, QPen
+from PyQt5.QtGui import QPainter, QColor, QFontMetrics, QLinearGradient, QPen, QFont
+from utilities.fontManager import FontManager
+
 
 
 class ThemedButton(QPushButton):
@@ -10,28 +12,22 @@ class ThemedButton(QPushButton):
         "small": QSize(90, 28)
     }
 
-    DEFAULT_COLORS = {
-    "primary": "#1e5d91",      # A step lighter than the background
-    "hover": "#257bbf",        # A brighter hover blue
-    "pressed": "#164569",      # Darker pressed tone
-    "border": "#2c77b8",       # Slightly vivid border
-    "disabled_bg": "#26425d",  # Muted gray-blue
-    "disabled_text": "#a0aab5",
-    "text": "#ffffff"          # White text for readability
+    FONT_SIZE_MAP = {
+        "large":  19,
+        "medium": 17,
+        "small": 15
     }
 
+    DEFAULT_COLORS = {
+        "primary": "#1e5d91",
+        "hover": "#257bbf",
+        "pressed": "#164569",
+        "disabled_bg": "#26425d",
+        "disabled_text": "#a0aab5",
+        "text": "#ffffff"
+    }
 
-    def __init__(
-        self,
-        text="",
-        parent=None,
-        size="medium",
-        primary_color=None,
-        hover_color=None,
-        pressed_color=None,
-        border_color=None,
-        text_color=None
-    ):
+    def __init__(self, text="", parent=None, size="medium", bold = False, **kwargs):
         super().__init__(text, parent)
 
         if isinstance(size, QSize):
@@ -40,18 +36,18 @@ class ThemedButton(QPushButton):
             self.setFixedSize(self.SIZE_MAP[size])
         else:
             self.setFixedSize(self.SIZE_MAP["medium"])
+        
+        font_name = FontManager.get_font("lexendMega")
+        self._font = QFont(font_name, self.FONT_SIZE_MAP.get(size, 18))
+        if bold:
+            self._font.setBold(True)
+        
+        self.setFont(self._font)
 
         self.colors = self.DEFAULT_COLORS.copy()
-        if primary_color:
-            self.colors["primary"] = primary_color
-        if hover_color:
-            self.colors["hover"] = hover_color
-        if pressed_color:
-            self.colors["pressed"] = pressed_color
-        if border_color:
-            self.colors["border"] = border_color
-        if text_color:
-            self.colors["text"] = text_color
+        for key in kwargs:
+            if key in self.colors:
+                self.colors[key] = kwargs[key]
 
         self.setCursor(Qt.PointingHandCursor)
         self.setFlat(True)
@@ -61,6 +57,13 @@ class ThemedButton(QPushButton):
 
         self.hovered = False
         self.pressed_in = False
+
+        # Drop shadow effect (Material style)
+        shadow = QGraphicsDropShadowEffect(self)
+        shadow.setBlurRadius(12)
+        shadow.setOffset(3, 3)
+        shadow.setColor(QColor(0, 0, 0, 100))
+        self.setGraphicsEffect(shadow)
 
     def enterEvent(self, event):
         self.hovered = True
@@ -88,32 +91,29 @@ class ThemedButton(QPushButton):
             self.hovered = True
             self.update()
             return True
-
         elif e.type() == QEvent.TouchUpdate:
             e.accept()
-            # (optional: you could track position here if needed)
             return True
-
         elif e.type() == QEvent.TouchEnd:
             e.accept()
             self.pressed_in = False
             self.hovered = False
             self.update()
-            # emit clicked() since QPushButton might not do it without mouse
             self.clicked.emit()
             return True
-
         return super().event(e)
 
     def paintEvent(self, event):
         painter = QPainter(self)
         painter.setRenderHint(QPainter.Antialiasing)
 
-        rect = self.rect().adjusted(2, 2, -2, -2)
+        # Full rect, slightly inset to prevent overflow from pen width
+        rect = self.rect().adjusted(1, 1, -1, -1)
 
         if self.pressed_in:
-            rect = rect.adjusted(2, 2, -2, -2)
+            rect = rect.adjusted(1, 1, -1, -1)
 
+        # Colors
         if not self.isEnabled():
             bg_color = QColor(self.colors["disabled_bg"])
             text_color = QColor(self.colors["disabled_text"])
@@ -127,9 +127,9 @@ class ThemedButton(QPushButton):
             bg_color = QColor(self.colors["primary"])
             text_color = QColor(self.colors["text"])
 
-        border_color = QColor(self.colors["border"])
         radius = min(self.width(), self.height()) * 0.15
 
+        # Background gradient
         grad = QLinearGradient(rect.topLeft(), rect.bottomLeft())
         grad.setColorAt(0, bg_color.lighter(120))
         grad.setColorAt(1, bg_color.darker(110))
@@ -138,11 +138,13 @@ class ThemedButton(QPushButton):
         painter.setPen(Qt.NoPen)
         painter.drawRoundedRect(rect, radius, radius)
 
-        pen = QPen(border_color)
-        pen.setWidth(1)
-        painter.setPen(pen)
+        # ✅ Single clean black border
+        border_pen = QPen(QColor(0, 0, 0))
+        border_pen.setWidth(1)
+        painter.setPen(border_pen)
         painter.drawRoundedRect(rect, radius, radius)
 
+        # Draw text
         font = self.font()
         fm = QFontMetrics(font)
         text = self.text()
@@ -157,3 +159,5 @@ class ThemedButton(QPushButton):
         painter.setFont(font)
         painter.setPen(text_color)
         painter.drawText(rect, Qt.AlignCenter, text)
+
+        painter.end()

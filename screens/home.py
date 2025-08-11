@@ -24,6 +24,8 @@ class HomeScreen(QWidget):
 
 
         # Screen1
+
+        # Layout Setup
         screen1LayoutWrapper = QVBoxLayout(self.screen1)
         screen1Heading = Heading("   Menu", font_size=28)
 
@@ -53,6 +55,14 @@ class HomeScreen(QWidget):
         screen1LayoutWrapper.addStretch()
         screen1LayoutWrapper.addWidget(screen1MainCover)
         screen1LayoutWrapper.addStretch()
+        # Layout Setup End
+
+        # Functionality
+
+        pipetteButton.clicked.connect(lambda: parentObj.router("pipette_config"))
+
+
+        # Funtionality End
 
 
 

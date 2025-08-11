@@ -8,7 +8,10 @@ class FontManager:
     def load_fonts():
         fonts_to_load = {
             "michroma": ":/fonts/michroma.ttf",
-            "lexendGiga": ":/fonts/lexendagiga.ttf"
+            "lexend": ":/fonts/lexend.ttf",
+            "lexendGiga": ":/fonts/lexendGiga.ttf",
+            "lexendMega": ":/fonts/lexandMega.ttf",
+            "lexendPeta": ":/fonts/lexendPeta.ttf"
         }
 
         for key, path in fonts_to_load.items():
