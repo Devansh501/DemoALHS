@@ -4,6 +4,7 @@ from PyQt5.QtCore import Qt, QTimer, QPropertyAnimation, pyqtProperty, QEasingCu
 from PyQt5.QtGui import QColor, QFont, QPainter, QPainterPath, QBrush, QPen
 
 from utilities.fontManager import FontManager
+from utilities.constants import MENU_BUTTON
 
 
 class MenuButton(QWidget):
@@ -11,10 +12,10 @@ class MenuButton(QWidget):
 
     def __init__(self, text="", fontSize=22, parent=None):
         super().__init__(parent)
-        self.setFixedSize(225, 198)
+        self.setFixedSize(MENU_BUTTON['length'], MENU_BUTTON['height'])
         self._text = text
 
-        font_name = FontManager.get_font("lexendGiga")
+        font_name = FontManager.get_font(MENU_BUTTON['font_name'])
         self._font = QFont(font_name, fontSize)
 
         self._scale = 1.0
@@ -49,7 +50,7 @@ class MenuButton(QWidget):
             self._draw_pressed_shadow(painter, button_rect, radius)
 
         # --- Button background ---
-        painter.setBrush(QColor("white"))
+        painter.setBrush(QColor(MENU_BUTTON['bgColor']))
         painter.setPen(Qt.NoPen)
         painter.drawRoundedRect(button_rect, radius, radius)
 
@@ -60,7 +61,7 @@ class MenuButton(QWidget):
 
         # --- Text ---
         painter.setFont(self._font)
-        painter.setPen(Qt.black)
+        painter.setPen(QColor(MENU_BUTTON['color']))
         margin = 20
         text_rect = button_rect.adjusted(margin, margin, -margin, -margin)
         painter.drawText(text_rect, Qt.AlignCenter | Qt.TextWordWrap, self._text)

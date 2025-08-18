@@ -3,6 +3,7 @@ from widgets.button import ThemedButton
 from widgets.newSelector import ThemedSelector
 from widgets.heading import Heading
 from widgets.info_card import InfoCard
+from widgets.toast import ToastWidget
 
 class PipetteConfigScreen(QWidget):
     def __init__(self, parentObj):
@@ -11,7 +12,7 @@ class PipetteConfigScreen(QWidget):
         screenLayoutWrapper = QVBoxLayout(self)
         
         # Heading
-        heading = Heading("Pipette Configuration", font_size=28)
+        heading = Heading("Pipette Configuration", level=2)
 
         # MainArea
         mainAreaWrapper = QWidget()
@@ -22,15 +23,15 @@ class PipetteConfigScreen(QWidget):
         leftAreaWidgetLayout = QVBoxLayout(leftAreaWIdget)
         pipTypeWidget = QWidget()
         pipTypeWidgetLayout = QHBoxLayout(pipTypeWidget)
-        pipTypeWidgetLayout.addWidget(Heading("Pipette Type: ", font_size=20))
-        pipTypeSelector = ThemedSelector()
+        pipTypeWidgetLayout.addWidget(Heading("Pipette Type: ", level=5))
+        pipTypeSelector = ThemedSelector(size="small")
         pipTypeSelector.addItems(["Single Pipette", "Multi Pipette"])
         pipTypeWidgetLayout.addWidget(pipTypeSelector)
 
         pipCapacityWidget = QWidget()
         pipCapacityWidgetLayout = QHBoxLayout(pipCapacityWidget)
-        pipCapacityWidgetLayout.addWidget(Heading("Pipette Capacity: ", font_size=20))
-        pipCapacitySelector = ThemedSelector()
+        pipCapacityWidgetLayout.addWidget(Heading("Pipette Capacity: ", level=5))
+        pipCapacitySelector = ThemedSelector(size="small")
         pipCapacitySelector.addItems(["50ul","100ul","200ul"])
         pipCapacityWidgetLayout.addWidget(pipCapacitySelector)
 
@@ -68,7 +69,7 @@ class PipetteConfigScreen(QWidget):
         saveButton = ThemedButton("Save")
 
         homeButton.clicked.connect(lambda: parentObj.router("home"))
-        saveButton.clicked.connect(lambda: print("Pipette configuration saved!"))
+        saveButton.clicked.connect(lambda: self.handleSave(parentObj))
         bottomWidgetLayout.addWidget(saveButton)
         bottomWidgetLayout.addStretch()
         bottomWidgetLayout.addWidget(homeButton)
@@ -79,3 +80,7 @@ class PipetteConfigScreen(QWidget):
         screenLayoutWrapper.addWidget(heading)
         screenLayoutWrapper.addWidget(mainAreaWrapper)
         screenLayoutWrapper.addWidget(bottomWidget)
+    
+    def handleSave(self,parentObj):
+        # Logic to save pipette configuration
+        ToastWidget(self,"Success!","Values saved successfully.", "success",3000)

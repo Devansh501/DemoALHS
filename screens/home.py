@@ -27,7 +27,7 @@ class HomeScreen(QWidget):
 
         # Layout Setup
         screen1LayoutWrapper = QVBoxLayout(self.screen1)
-        screen1Heading = Heading("   Menu", font_size=28)
+        screen1Heading = Heading("   Menu", level=1)
 
         screen1MainWidget = QWidget()
         screen1GridLayout = QGridLayout(screen1MainWidget)
@@ -60,7 +60,7 @@ class HomeScreen(QWidget):
         # Functionality
 
         pipetteButton.clicked.connect(lambda: parentObj.router("pipette_config"))
-
+        labwareButton.clicked.connect(lambda: parentObj.router("labware"))
 
         # Funtionality End
 
@@ -68,7 +68,7 @@ class HomeScreen(QWidget):
 
         # Screen2
         screen2LayoutWrapper = QVBoxLayout(self.screen2)
-        screen2Heading = Heading("   Menu", font_size=28)
+        screen2Heading = Heading("   Menu", level=1)
 
         screen2MainWidget = QWidget()
         screen2GridLayout = QGridLayout(screen2MainWidget)

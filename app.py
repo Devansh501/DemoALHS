@@ -18,7 +18,8 @@ class MainWindow(QMainWindow):
         stylesheet = load_stylesheet("globals.qss")
         self.setStyleSheet(stylesheet)
 
-        self.showFullScreen()
+        # self.showFullScreen()
+        self.setFixedSize(1024, 600)
 
         # Use a QStackedWidget to hold and switch screens
         self.stack = QStackedWidget()
@@ -76,7 +77,6 @@ class MainWindow(QMainWindow):
             self.current_screen = new_widget
 
         self.anim_in.finished.connect(on_animation_finished)
-
         self.anim_out.start()
         self.anim_in.start()
 
@@ -87,5 +87,8 @@ class MainWindow(QMainWindow):
         elif screen_name == "pipette_config":
             from screens.pipette_config import PipetteConfigScreen
             return PipetteConfigScreen(self)
+        elif screen_name == "labware":
+            from screens.labware import LabwareScreen
+            return LabwareScreen(self)
         else:
             raise ValueError(f"Unknown screen: {screen_name}")

@@ -2,29 +2,30 @@ from PyQt5.QtWidgets import QPushButton, QGraphicsDropShadowEffect
 from PyQt5.QtCore import QSize, Qt, QEvent
 from PyQt5.QtGui import QPainter, QColor, QFontMetrics, QLinearGradient, QPen, QFont
 from utilities.fontManager import FontManager
+from utilities.constants import CLICKABLE
 
 
 
 class ThemedButton(QPushButton):
     SIZE_MAP = {
-        "large": QSize(160, 48),
-        "medium": QSize(120, 36),
-        "small": QSize(90, 28)
+        "large": CLICKABLE["btnSizeLarge"],
+        "medium": CLICKABLE["btnSizeMedium"],
+        "small": CLICKABLE["btnSizeSmall"],
     }
 
     FONT_SIZE_MAP = {
-        "large":  19,
-        "medium": 17,
-        "small": 15
+        "large":  CLICKABLE["fontSizeLarge"],
+        "medium": CLICKABLE["fontSizeMedium"],
+        "small": CLICKABLE["fontSizeSmall"],
     }
 
     DEFAULT_COLORS = {
-        "primary": "#1e5d91",
-        "hover": "#257bbf",
-        "pressed": "#164569",
-        "disabled_bg": "#26425d",
-        "disabled_text": "#a0aab5",
-        "text": "#ffffff"
+        "primary": CLICKABLE["primary"],
+        "hover": CLICKABLE["hover"],
+        "pressed": CLICKABLE["pressed"],
+        "disabled_bg": CLICKABLE["disabledBg"],
+        "disabled_text": CLICKABLE["disabledText"],
+        "text": CLICKABLE["text"]
     }
 
     def __init__(self, text="", parent=None, size="medium", bold = False, **kwargs):
@@ -139,10 +140,10 @@ class ThemedButton(QPushButton):
         painter.drawRoundedRect(rect, radius, radius)
 
         # ✅ Single clean black border
-        border_pen = QPen(QColor(0, 0, 0))
-        border_pen.setWidth(1)
-        painter.setPen(border_pen)
-        painter.drawRoundedRect(rect, radius, radius)
+        # border_pen = QPen(QColor(0, 0, 0))
+        # border_pen.setWidth(1)
+        # painter.setPen(border_pen)
+        # painter.drawRoundedRect(rect, radius, radius)
 
         # Draw text
         font = self.font()
