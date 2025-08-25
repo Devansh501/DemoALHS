@@ -1,0 +1,230 @@
+[
+  {
+    "index": 0,
+    "type": "Tip Box",
+    "make": "Eppendorf",
+    "name": "epT.I.P.S. Motion",
+    "details": [
+      { "label": "Volume", "value": "50ul" },
+      { "label": "Grid", "value": "96 tips" },
+      { "label": "Feature", "value": "Automation compatible" }
+    ],
+    "identifiers": ["Volume", "Grid", "Feature"]
+  },
+  {
+    "index": 1,
+    "type": "Tip Box",
+    "make": "Rainin",
+    "name": "LTS Pipet Tips",
+    "details": [
+      { "label": "Volume", "value": "1000ul" },
+      { "label": "Grid", "value": "96 tips" },
+      { "label": "Purity", "value": "Sterile, filter" }
+    ],
+    "identifiers": ["Volume", "Grid", "Purity"]
+  },
+  {
+    "index": 2,
+    "type": "Tip Box",
+    "make": "Gilson",
+    "name": "Diamond D-Series",
+    "details": [
+      { "label": "Volume", "value": "20ul" },
+      { "label": "Grid", "value": "96 tips" },
+      { "label": "Feature", "value": "Low retention" }
+    ],
+    "identifiers": ["Volume", "Grid", "Feature"]
+  },
+  {
+    "index": 3,
+    "type": "Tip Box",
+    "make": "Sarstedt",
+    "name": "Racked Pipette Tips",
+    "details": [
+      { "label": "Volume", "value": "1000ul" },
+      { "label": "Grid", "value": "96 tips" },
+      { "label": "Material", "value": "Polypropylene" }
+    ],
+    "identifiers": ["Volume", "Grid", "Material"]
+  },
+  {
+    "index": 4,
+    "type": "Tip Box",
+    "make": "Corning",
+    "name": "Axygen A-series",
+    "details": [
+      { "label": "Volume", "value": "100ul" },
+      { "label": "Grid", "value": "96 tips" },
+      { "label": "Purity", "value": "RNase/DNase-free" }
+    ],
+    "identifiers": ["Volume", "Grid", "Purity"]
+  },
+  {
+    "index": 5,
+    "type": "Tip Box",
+    "make": "Thermo Fisher Scientific",
+    "name": "Finntip Pipette Tips",
+    "details": [
+      { "label": "Volume", "value": "200ul" },
+      { "label": "Grid", "value": "96 tips" },
+      { "label": "Feature", "value": "Universal fit" }
+    ],
+    "identifiers": ["Volume", "Grid", "Feature"]
+  },
+  {
+    "index": 6,
+    "type": "Well Plate",
+    "make": "Nunc",
+    "name": "MicroWell Plates",
+    "details": [
+      { "label": "Wells", "value": "96" },
+      { "label": "Volume", "value": "300ul" },
+      { "label": "Bottom", "value": "U-bottom" },
+      { "label": "Material", "value": "Polystyrene" }
+    ],
+    "identifiers": ["Wells", "Volume", "Bottom", "Material"]
+  },
+  {
+    "index": 7,
+    "type": "Well Plate",
+    "make": "Eppendorf",
+    "name": "Microplate 96-well",
+    "details": [
+      { "label": "Wells", "value": "96" },
+      { "label": "Volume", "value": "2ml" },
+      { "label": "Bottom", "value": "Round" },
+      { "label": "Feature", "value": "Deep well" }
+    ],
+    "identifiers": ["Wells", "Volume", "Bottom", "Feature"]
+  },
+  {
+    "index": 8,
+    "type": "Well Plate",
+    "make": "Greiner Bio-One",
+    "name": "CELLSTAR 6-Well Plate",
+    "details": [
+      { "label": "Wells", "value": "6" },
+      { "label": "Volume", "value": "16.8ml" },
+      { "label": "Bottom", "value": "Flat" },
+      { "label": "Coating", "value": "TC-Treated" }
+    ],
+    "identifiers": ["Wells", "Volume", "Bottom", "Coating"]
+  },
+  {
+    "index": 9,
+    "type": "Well Plate",
+    "make": "Corning",
+    "name": "Costar 1536-Well Plate",
+    "details": [
+      { "label": "Wells", "value": "1536" },
+      { "label": "Volume", "value": "11.5ul" },
+      { "label": "Bottom", "value": "Clear" },
+      { "label": "Application", "value": "High-density assays" }
+    ],
+    "identifiers": ["Wells", "Volume", "Bottom", "Application"]
+  },
+  {
+    "index": 10,
+    "type": "Well Plate",
+    "make": "PerkinElmer",
+    "name": "OptiPlate-96",
+    "details": [
+      { "label": "Wells", "value": "96" },
+      { "label": "Volume", "value": "350ul" },
+      { "label": "Bottom", "value": "Solid black" },
+      { "label": "Application", "value": "Luminescence" }
+    ],
+    "identifiers": ["Wells", "Volume", "Bottom", "Application"]
+  },
+  {
+    "index": 11,
+    "type": "Well Plate",
+    "make": "Thermo Fisher Scientific",
+    "name": "Microtiter Plate",
+    "details": [
+      { "label": "Wells", "value": "384" },
+      { "label": "Volume", "value": "120ul" },
+      { "label": "Bottom", "value": "V-bottom" },
+      { "label": "Material", "value": "Polypropylene" }
+    ],
+    "identifiers": ["Wells", "Volume", "Bottom", "Material"]
+  },
+  {
+    "index": 12,
+    "type": "Reservoir",
+    "make": "Axygen",
+    "name": "Reagent Reservoir 10mL",
+    "details": [
+      { "label": "Volume", "value": "10mL" },
+      { "label": "Channels", "value": "1" },
+      { "label": "Material", "value": "Polystyrene" },
+      { "label": "Feature", "value": "Single channel" }
+    ],
+    "identifiers": ["Volume", "Channels", "Material", "Feature"]
+  },
+  {
+    "index": 13,
+    "type": "Reservoir",
+    "make": "INTEGRA Biosciences",
+    "name": "Reservoir with SureFlo",
+    "details": [
+      { "label": "Volume", "value": "25mL" },
+      { "label": "Channels", "value": "1" },
+      { "label": "Material", "value": "Polystyrene" },
+      { "label": "Feature", "value": "SureFlo anti-sealing array" }
+    ],
+    "identifiers": ["Volume", "Channels", "Material", "Feature"]
+  },
+  {
+    "index": 14,
+    "type": "Reservoir",
+    "make": "Corning",
+    "name": "Reagent Reservoir",
+    "details": [
+      { "label": "Volume", "value": "25mL" },
+      { "label": "Channels", "value": "1" },
+      { "label": "Sterility", "value": "Sterile" },
+      { "label": "Feature", "value": "V-shaped bottom" }
+    ],
+    "identifiers": ["Volume", "Channels", "Sterility", "Feature"]
+  },
+  {
+    "index": 15,
+    "type": "Reservoir",
+    "make": "Thermo Fisher Scientific",
+    "name": "Nunc Reagent Reservoir",
+    "details": [
+      { "label": "Volume", "value": "50mL" },
+      { "label": "Channels", "value": "1" },
+      { "label": "Material", "value": "Polypropylene" },
+      { "label": "Feature", "value": "Divided for multiple reagents" }
+    ],
+    "identifiers": ["Volume", "Channels", "Material", "Feature"]
+  },
+  {
+    "index": 16,
+    "type": "Reservoir",
+    "make": "BRAND",
+    "name": "Reagent Reservoir 12-channel",
+    "details": [
+      { "label": "Volume", "value": "10mL" },
+      { "label": "Channels", "value": "12" },
+      { "label": "Material", "value": "Polypropylene" },
+      { "label": "Sterility", "value": "Sterile" }
+    ],
+    "identifiers": ["Volume", "Channels", "Material", "Sterility"]
+  },
+  {
+    "index": 17,
+    "type": "Reservoir",
+    "make": "Alpha Laboratories",
+    "name": "Alpha-Plus Reservoir",
+    "details": [
+      { "label": "Volume", "value": "100mL" },
+      { "label": "Channels", "value": "1" },
+      { "label": "Material", "value": "Polypropylene" },
+      { "label": "Feature", "value": "Graduated" }
+    ],
+    "identifiers": ["Volume", "Channels", "Material", "Feature"]
+  }
+]

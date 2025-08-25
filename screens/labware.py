@@ -1,74 +1,226 @@
-from PyQt5.QtWidgets import QVBoxLayout, QWidget,QHBoxLayout
+from PyQt5.QtWidgets import QVBoxLayout, QWidget,QHBoxLayout, QGraphicsDropShadowEffect,QLabel,QApplication, QGridLayout
+from PyQt5.QtGui import QColor, QFont
 from widgets.heading import Heading
-from widgets.info_card import InfoCard
 from widgets.button import ThemedButton
-from widgets.numericInput import ThemedInputField
+from widgets.newSelector import ThemedSelector
+from widgets.toast import ToastWidget
+from widgets.scroll_area import ScrollableWidget
+from utilities.utils import Utils
+from utilities.constants import LABWARE_CARD
+from widgets.labware_card import LabwareCard
+    
+        
 
 class LabwareScreen(QWidget):
     def __init__(self,parentObj):
         super().__init__()
-
+        self.activeLabwares = []
+        self.filters = {
+            "type": 'All',
+            "make": 'All'
+        }
+        # stylesheet = Utils.load_stylesheet("globals.qss")
+        # self.setStyleSheet(stylesheet)
+        self.middleScrollArea = ScrollableWidget()
+        self.labwareData = Utils.load_json("labwares.json")
+        self.filteredLabwares = self.labwareData
+        
+        
+        self.typeOptions = set(map(lambda x: x["type"], self.labwareData))
+        
+        screenDimensions = QApplication.primaryScreen().size()
         screenLayoutWrapper = QVBoxLayout(self)
 
+        
         # Heading
-        heading = Heading("Labware", level=1)
-
-        # MainArea
+        mainHeading = Heading("Labware",level=1)
+        screenLayoutWrapper.addWidget(mainHeading)
+        
+        # upperOptionsLayout
+        upperOptionsWidget = QWidget()
+        upperOptionsLayout = QHBoxLayout(upperOptionsWidget)
+        
+        optionAWrap = QWidget()
+        optionALayout = QHBoxLayout(optionAWrap)
+        
+        optionALayout.addWidget(Heading("Type: ", level=5))
+        optionAInput = ThemedSelector(size="medium")
+        optionAInput.addItems(["All"])
+        optionAInput.addItems(list(self.typeOptions))
+        indexA = optionAInput.findText("All")
+        if indexA >= 0:
+            optionAInput.setCurrentIndex(indexA)
+        optionALayout.addWidget(optionAInput)
+       
+        
+        optionBWrap = QWidget()
+        optionBLayout = QHBoxLayout(optionBWrap)
+        
+        optionBLayout.addWidget(Heading("Make: ", level=5))
+        optionBInput = ThemedSelector(size="medium")
+        optionBInput.addItems(["All"])
+        indexB = optionBInput.findText("All")
+        if indexB >= 0:
+            optionBInput.setCurrentIndex(indexB)
+        self.handleTypeChange("All", optionBInput)
+        optionBLayout.addWidget(optionBInput)
+        
+        
+        upperOptionsLayout.addWidget(optionAWrap)
+        upperOptionsLayout.addWidget(optionBWrap)
+        upperOptionsLayout.addStretch(1)
+        
+        screenLayoutWrapper.addWidget(upperOptionsWidget)
+        
+        
+        # mainArea
         mainAreaWrapper = QWidget()
         mainAreaWrapperLayout = QHBoxLayout(mainAreaWrapper)
-
-        # left Area
+        
+        # main Area --> left Area
         leftAreaWidget = QWidget()
+        leftAreaWidget.setMaximumSize(int(screenDimensions.width() * 0.15), int(screenDimensions.height() * 0.7))
+        # leftAreaWidget.setFixedSize(int(screenDimensions.width() * 0.20), int(screenDimensions.height() * 0.4))
+        leftAreaWidget.setProperty("class", "dropper")
         leftAreaWidgetLayout = QVBoxLayout(leftAreaWidget)
-
-        upperOptionsWidget = QWidget()
-        upperOptionsWidgetLayout = QHBoxLayout(upperOptionsWidget)
-        btn = ThemedButton("Options Here!")
-        upperOptionsWidgetLayout.addWidget(btn)
-
-        leftAreaWidgetLayout.addWidget(upperOptionsWidget)
+        shadow = QGraphicsDropShadowEffect()
+        shadow.setBlurRadius(20)
+        shadow.setXOffset(6)
+        shadow.setYOffset(6)
+        shadow.setColor(QColor(0, 0, 0, 60))  # RGBA shadow
+        leftAreaWidget.setGraphicsEffect(shadow)
+        leftAreaWidgetLayout.addWidget(Heading("Info. ", level=2))
+        label = QLabel("its properties.")
+        font = QFont("Arial", 20)
+        label.setFont(font)
+        leftAreaWidgetLayout.addWidget(label)
         
-        labwareInfoCard = InfoCard(
-            heading="Labware Info:",
-            points=[
-                "Maximum Labware Capacity: 200ul",
-                "Minimum Pipette Capacity: 5ul",
-                "Pipette company: brand name",
-                "Pipette company: brand name"
-            ],
-            width=400,
-            height=200
-        )
-        leftAreaWidgetLayout.addWidget(labwareInfoCard)
-
-        addLabwareBtn = ThemedButton("Add Labware")
-        leftAreaWidgetLayout.addWidget(addLabwareBtn)
+        # main Area --> middle Area
+        middleAreaWidget = QWidget()
+        middleAreaWidget.setMaximumSize(int(screenDimensions.width() * 0.5), int(screenDimensions.height() * 0.7))
+        middleAreaWidget.setProperty("class", "dropper")
+        middleAreaWidgetLayout = QVBoxLayout(middleAreaWidget)
+        shadow = QGraphicsDropShadowEffect()
+        shadow.setBlurRadius(20)
+        shadow.setXOffset(6)
+        shadow.setYOffset(6)
+        shadow.setColor(QColor(0, 0, 0, 60))  # RGBA shadow
+        middleAreaWidget.setGraphicsEffect(shadow)
+        middleAreaWidgetLayout.setContentsMargins(0,0,0,0)
+        middleAreaWidgetLayout.addWidget(self.middleScrollArea)
         
-                
-        # right Area
-        rightAreaWidget = QWidget()
+
+        
+        # right Area --> right Area   
+        rightAreaWidget = QWidget()   
+        rightAreaWidget.setMaximumSize(int(screenDimensions.width() * 0.25), int(screenDimensions.height() * 0.7))
+        rightAreaWidget.setProperty("class", "dropper")
         rightAreaWidgetLayout = QVBoxLayout(rightAreaWidget)
-
-        card = InfoCard(
-            heading="Pipette Info:",
-            points=[
-                "Maximum Pipette Capacity: 200ul",
-                "Minimum Pipette Capacity: 5ul",
-                "Pipette company: brand name",
-                "Pipette company: brand name",
-                "Pipette company: brand name",
-                "Pipette company: brand name"
-            ],
-            width=400,
-            height=350
-        )
-        inp = ThemedInputField("test", "0", "medium")
-        rightAreaWidgetLayout.addWidget(inp)
-        rightAreaWidgetLayout.addWidget(card)
+        shadow = QGraphicsDropShadowEffect()
+        shadow.setBlurRadius(20)
+        shadow.setXOffset(6)
+        shadow.setYOffset(6)
+        shadow.setColor(QColor(0, 0, 0, 60))  # RGBA shadow
+        rightAreaWidget.setGraphicsEffect(shadow)
+        rightAreaWidgetLayout.addWidget(Heading("Info. ", level=2))
+        label = QLabel("its properties.")
+        font = QFont("Arial", 20)
+        label.setFont(font)
+        rightAreaWidgetLayout.addWidget(label)  
         
-
+        mainAreaWrapperLayout.addSpacing(4)
         mainAreaWrapperLayout.addWidget(leftAreaWidget)
+        mainAreaWrapperLayout.addWidget(middleAreaWidget)
         mainAreaWrapperLayout.addWidget(rightAreaWidget)
+
         
-        screenLayoutWrapper.addWidget(heading)
+               
         screenLayoutWrapper.addWidget(mainAreaWrapper)
+        
+        # navigation Buttons
+        bottomWidget = QWidget()
+        bottomWidgetLayout = QHBoxLayout(bottomWidget)
+        homeButton = ThemedButton("Home")
+        saveButton = ThemedButton("Save")
+
+        homeButton.clicked.connect(lambda: parentObj.router("home"))
+        saveButton.clicked.connect(lambda: self.handleSave(parentObj))
+        bottomWidgetLayout.addWidget(saveButton)
+        bottomWidgetLayout.addStretch()
+        bottomWidgetLayout.addWidget(homeButton)
+        bottomWidgetLayout.setContentsMargins(20, 20, 20, 20)
+        screenLayoutWrapper.addWidget(bottomWidget)
+        
+        # events
+        optionAInput.currentTextChanged.connect(lambda text: self.handleTypeChange(text,optionBInput))
+        optionBInput.currentTextChanged.connect(lambda text: self.handleMakeChange(text))
+
+    def handleSave(self,parentObj):
+        # Logic to save labware configuration
+        ToastWidget(self,"Success!","Values saved successfully.", "success",3000)
+    
+    def handleTypeChange(self,text,optionBInput):
+        optionBInput.clear()
+        optionBInput.addItems(["All"])
+        indexB = optionBInput.findText("All")
+        if indexB >= 0:
+            optionBInput.setCurrentIndex(indexB)
+        if text == "All":
+            availableMakes = set(map(lambda x: x["make"], self.labwareData))
+        else:
+            availableMakes = set(
+                map(lambda x: x["make"],
+                    filter(lambda x: x["type"] == text and x.get("make"), self.labwareData))
+            )
+        optionBInput.addItems(list(availableMakes))
+        self.filters["type"] = text
+        self.filters["make"] = "All"
+        self.filterLabwares()
+    
+    def handleMakeChange(self,text):
+        self.filters["make"] = text
+        self.filterLabwares()
+    
+    def loadCards(self):
+        # print("Load....\n")
+        # print(self.filteredLabwares)
+        self.clearLayout(self.middleScrollArea.contentLayout())
+        filteredCards = map(lambda x: LabwareCard(self,x), self.filteredLabwares)
+        rows = len(self.filteredLabwares)
+        grid = QGridLayout()
+        grid.setSpacing(22)
+        self
+        self.middleScrollArea.setContentLayout(grid)
+        c=0
+        r=0
+        for x in filteredCards:
+            if c==0:
+                self.middleScrollArea.contentLayout().addWidget(x,r,c)
+                c=1
+            else:
+                self.middleScrollArea.contentLayout().addWidget(x,r,c)
+                c=0
+                r = r + 1
+    
+    def filterLabwares(self):
+        if self.filters["type"] == "All" and self.filters["make"] == "All":
+            self.filteredLabwares = self.labwareData
+        else:
+            self.filteredLabwares = list(
+                filter(
+                    lambda x: (self.filters["type"] == "All" or x["type"] == self.filters["type"]) and
+                               (self.filters["make"] == "All" or x["make"] == self.filters["make"]),
+                    self.labwareData
+                )
+            )
+        self.loadCards()
+    
+    def clearLayout(self,layout):
+        while layout.count():
+            item = layout.takeAt(0)
+            widget = item.widget()
+            if widget:
+                widget.setParent(None)
+    
+    def test(self):
+        print("tested positive!")

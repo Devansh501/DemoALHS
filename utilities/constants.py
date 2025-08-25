@@ -23,17 +23,18 @@ CLICKABLE = {
 
 
 HEADING = {
-    "base":{
-    1: {"size": 18, "spacing": 1.4},   # H1 (main heading)
-    2: {"size": 16, "spacing": 1.2},   # H2
-    3: {"size": 14, "spacing": 1.0},   # H3
-    4: {"size": 13, "spacing": 0.9},   # H4
-    5: {"size": 12, "spacing": 0.8},   # H5
-    6: {"size": 11, "spacing": 0.7},   # H6 (smallest)
+    "base": {
+        1: {"size": 22, "spacing": 1.4},  # H1 (main heading)
+        2: {"size": 20, "spacing": 1.3},  # H2
+        3: {"size": 18, "spacing": 1.1},  # H3
+        4: {"size": 16, "spacing": 1.0},  # H4
+        5: {"size": 14, "spacing": 0.9},  # H5
+        6: {"size": 13, "spacing": 0.8},  # H6 (smallest)
     },
-    "font_name":"michroma",
+    "font_name": "michroma",
     "font_color": "#ffffff"
 }
+
 
 MENU_BUTTON = {
     "length":225,
@@ -42,3 +43,12 @@ MENU_BUTTON = {
     "bgColor": "#ffffff",
     "color":"#000000"
 }
+
+# Labware Screen
+
+# Labware Card
+LABWARE_CARD = {
+    "backgroundColor":"#E4EDFF",
+    "borderRadius":"8px"
+}
+

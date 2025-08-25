@@ -28,7 +28,7 @@ class ThemedButton(QPushButton):
         "text": CLICKABLE["text"]
     }
 
-    def __init__(self, text="", parent=None, size="medium", bold = False, **kwargs):
+    def __init__(self, text="", size="medium", bold = False,  parent=None, **kwargs):
         super().__init__(text, parent)
 
         if isinstance(size, QSize):

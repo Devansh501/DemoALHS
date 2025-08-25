@@ -1,4 +1,7 @@
 from PyQt5.QtGui import QColor
+from pathlib import Path
+import sys
+import json
 
 class Utils:
 
@@ -13,3 +16,26 @@ class Utils:
     def color_to_rgba_str(color: QColor) -> str:
         """Convert QColor to a 'rgba(r,g,b,a)' string for QSS."""
         return f"rgba({color.red()}, {color.green()}, {color.blue()}, {color.alphaF():.2f})"
+    
+    @staticmethod
+    def load_stylesheet(filename):
+        base_path = Path(sys.argv[0]).resolve().parent
+        qss_path = base_path / "styles" / filename
+        return qss_path.read_text()
+    
+    @staticmethod
+    def load_json(filename):
+        
+        base_path = Path(sys.argv[0]).resolve().parent
+        json_path = base_path / "resources/json" / filename
+
+        try:
+            with open(json_path, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except FileNotFoundError:
+            print(f"[Error] JSON file not found: {json_path}")
+            return {}
+        except json.JSONDecodeError as e:
+            print(f"[Error] Failed to decode JSON ({json_path}): {e}")
+            return {}
+

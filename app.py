@@ -2,20 +2,16 @@ from PyQt5.QtWidgets import QMainWindow, QStackedWidget, QWidget
 from PyQt5.QtCore import QPropertyAnimation, QEasingCurve, QRect, QObject, pyqtSlot
 from pathlib import Path
 from resources import resources
+from utilities.utils import Utils
 
-
-def load_stylesheet(filename):
-    base_path = Path(__file__).resolve().parent
-    qss_path = base_path / "styles" / filename
-    return qss_path.read_text()
 
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-
+        self.setObjectName("Global")
         # Load QSS
-        stylesheet = load_stylesheet("globals.qss")
+        stylesheet = Utils.load_stylesheet("globals.qss")
         self.setStyleSheet(stylesheet)
 
         # self.showFullScreen()

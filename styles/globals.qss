@@ -1,8 +1,24 @@
-QMainWindow{
+QMainWindow#Global{
     background: qlineargradient(
                     x1: 0, y1: 0,
                     x2: 0, y2: 1,
                     stop: 0 #0c3e66,
                     stop: 1 #b2d3f2
                 );
+
+}
+
+QWidget[class="dropper"]{
+    background: rgba(255, 255, 255, 0.07);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+QWidget#Labcard{
+    background: #E4EDFF;
+    border-radius: 8px;
+}
+
+QLabel#cardName{
+    color: black
 }

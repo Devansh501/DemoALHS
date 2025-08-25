@@ -12,7 +12,7 @@ class PipetteConfigScreen(QWidget):
         screenLayoutWrapper = QVBoxLayout(self)
         
         # Heading
-        heading = Heading("Pipette Configuration", level=2)
+        heading = Heading("Pipette Configuration", level=1)
 
         # MainArea
         mainAreaWrapper = QWidget()
@@ -25,7 +25,7 @@ class PipetteConfigScreen(QWidget):
         pipTypeWidgetLayout = QHBoxLayout(pipTypeWidget)
         pipTypeWidgetLayout.addWidget(Heading("Pipette Type: ", level=5))
         pipTypeSelector = ThemedSelector(size="small")
-        pipTypeSelector.addItems(["Single Pipette", "Multi Pipette"])
+        pipTypeSelector.addItems(["Single Channel", "Multi Channel"])
         pipTypeWidgetLayout.addWidget(pipTypeSelector)
 
         pipCapacityWidget = QWidget()
@@ -50,10 +50,9 @@ class PipetteConfigScreen(QWidget):
             points=[
                 "Maximum Pipette Capacity: 200ul",
                 "Minimum Pipette Capacity: 5ul",
-                "Pipette company: brand name",
-                "Pipette company: brand name",
-                "Pipette company: brand name",
-                "Pipette company: brand name"
+                "Inaccuraccy %: 1.5%",
+                "Imprecisions %: 1.0%",
+                "Channels: 8"
             ],
             width=400,
             height=350
