@@ -14,8 +14,8 @@ class MainWindow(QMainWindow):
         stylesheet = Utils.load_stylesheet("globals.qss")
         self.setStyleSheet(stylesheet)
 
-        # self.showFullScreen()
-        self.setFixedSize(1024, 600)
+        self.showFullScreen()
+        # self.setFixedSize(1024, 600)
 
         # Use a QStackedWidget to hold and switch screens
         self.stack = QStackedWidget()

@@ -30,6 +30,9 @@ HEADING = {
         4: {"size": 16, "spacing": 1.0},  # H4
         5: {"size": 14, "spacing": 0.9},  # H5
         6: {"size": 13, "spacing": 0.8},  # H6 (smallest)
+        7: {"size": 11, "spacing": 0.6},
+        8: {"size": 9,  "spacing": 0.5},
+        9: {"size": 7,  "spacing":0.3}
     },
     "font_name": "michroma",
     "font_color": "#ffffff"

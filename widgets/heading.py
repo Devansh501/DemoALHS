@@ -18,7 +18,7 @@ class Heading(QLabel):
         super().__init__(text, parent)
 
         # --- Clamp level ---
-        level = max(1, min(6, level))
+        level = max(1, min(9, level))
         settings = self.BASE_SIZES[level]
 
         # --- Screen scaling ---

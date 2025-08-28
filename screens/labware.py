@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QVBoxLayout, QWidget,QHBoxLayout, QGraphicsDropShadowEffect,QLabel,QApplication, QGridLayout
+from PyQt5.QtWidgets import QVBoxLayout, QWidget,QHBoxLayout, QGraphicsDropShadowEffect,QLabel,QApplication, QGridLayout, QSpacerItem, QSizePolicy
 from PyQt5.QtGui import QColor, QFont
 from widgets.heading import Heading
 from widgets.button import ThemedButton
@@ -8,17 +8,23 @@ from widgets.scroll_area import ScrollableWidget
 from utilities.utils import Utils
 from utilities.constants import LABWARE_CARD
 from widgets.labware_card import LabwareCard
+from widgets.labware_stack_card import LabwareStackCard
     
         
 
 class LabwareScreen(QWidget):
     def __init__(self,parentObj):
         super().__init__()
+        self.rightStackWidget = ScrollableWidget()
+        self.leftInfoWidget = ScrollableWidget()
         self.activeLabwares = []
+        self.selectedItem = 0
+        self.addedLabwares = []
         self.filters = {
             "type": 'All',
             "make": 'All'
         }
+        self.infoSectionId = 0
         # stylesheet = Utils.load_stylesheet("globals.qss")
         # self.setStyleSheet(stylesheet)
         self.middleScrollArea = ScrollableWidget()
@@ -79,8 +85,7 @@ class LabwareScreen(QWidget):
         
         # main Area --> left Area
         leftAreaWidget = QWidget()
-        leftAreaWidget.setMaximumSize(int(screenDimensions.width() * 0.15), int(screenDimensions.height() * 0.7))
-        # leftAreaWidget.setFixedSize(int(screenDimensions.width() * 0.20), int(screenDimensions.height() * 0.4))
+        leftAreaWidget.setMaximumSize(int(screenDimensions.width() * 0.18), int(screenDimensions.height() * 0.7))
         leftAreaWidget.setProperty("class", "dropper")
         leftAreaWidgetLayout = QVBoxLayout(leftAreaWidget)
         shadow = QGraphicsDropShadowEffect()
@@ -89,11 +94,10 @@ class LabwareScreen(QWidget):
         shadow.setYOffset(6)
         shadow.setColor(QColor(0, 0, 0, 60))  # RGBA shadow
         leftAreaWidget.setGraphicsEffect(shadow)
-        leftAreaWidgetLayout.addWidget(Heading("Info. ", level=2))
-        label = QLabel("its properties.")
-        font = QFont("Arial", 20)
-        label.setFont(font)
-        leftAreaWidgetLayout.addWidget(label)
+        leftAreaWidgetLayout.addWidget(Heading("Info. ", level=6))
+        self.setInfo(0)
+        leftAreaWidgetLayout.addWidget(self.leftInfoWidget)
+        leftAreaWidgetLayout.addStretch(1)
         
         # main Area --> middle Area
         middleAreaWidget = QWidget()
@@ -116,17 +120,17 @@ class LabwareScreen(QWidget):
         rightAreaWidget.setMaximumSize(int(screenDimensions.width() * 0.25), int(screenDimensions.height() * 0.7))
         rightAreaWidget.setProperty("class", "dropper")
         rightAreaWidgetLayout = QVBoxLayout(rightAreaWidget)
+        rightAreaWidgetLayout.addSpacing(1)
         shadow = QGraphicsDropShadowEffect()
         shadow.setBlurRadius(20)
         shadow.setXOffset(6)
         shadow.setYOffset(6)
         shadow.setColor(QColor(0, 0, 0, 60))  # RGBA shadow
         rightAreaWidget.setGraphicsEffect(shadow)
-        rightAreaWidgetLayout.addWidget(Heading("Info. ", level=2))
-        label = QLabel("its properties.")
-        font = QFont("Arial", 20)
-        label.setFont(font)
-        rightAreaWidgetLayout.addWidget(label)  
+        rightAreaWidgetLayout.addWidget(Heading("Labware Added",7))
+        self.loadSelectedCards()
+        rightAreaWidgetLayout.addWidget(self.rightStackWidget)
+            
         
         mainAreaWrapperLayout.addSpacing(4)
         mainAreaWrapperLayout.addWidget(leftAreaWidget)
@@ -182,8 +186,6 @@ class LabwareScreen(QWidget):
         self.filterLabwares()
     
     def loadCards(self):
-        # print("Load....\n")
-        # print(self.filteredLabwares)
         self.clearLayout(self.middleScrollArea.contentLayout())
         filteredCards = map(lambda x: LabwareCard(self,x), self.filteredLabwares)
         rows = len(self.filteredLabwares)
@@ -201,6 +203,9 @@ class LabwareScreen(QWidget):
                 self.middleScrollArea.contentLayout().addWidget(x,r,c)
                 c=0
                 r = r + 1
+        
+        infoParameter = self.filteredLabwares[0]["index"] if len(self.filteredLabwares)>0 else -1
+        self.setInfo(infoParameter)
     
     def filterLabwares(self):
         if self.filters["type"] == "All" and self.filters["make"] == "All":
@@ -214,6 +219,18 @@ class LabwareScreen(QWidget):
                 )
             )
         self.loadCards()
+        
+    def addLabwares(self,index):
+        tempFilltr = list(filter(lambda x: x["index"]==index, self.filteredLabwares))
+        self.addedLabwares.append(tempFilltr[0])
+        self.loadSelectedCards()
+    
+    def removeAddedLabwares(self, index):
+        i = next((i for i, item in enumerate(self.addedLabwares) if item["index"] == index), None)
+        if i is not None:
+            self.addedLabwares.pop(i)
+        self.loadSelectedCards()
+
     
     def clearLayout(self,layout):
         while layout.count():
@@ -222,5 +239,52 @@ class LabwareScreen(QWidget):
             if widget:
                 widget.setParent(None)
     
-    def test(self):
-        print("tested positive!")
+    def setInfo(self,ind):
+        if len(self.filteredLabwares)<=0 or ind == -1:
+            self.clearLayout(self.leftInfoWidget.contentLayout())
+            tempLayout = QVBoxLayout()
+            self.leftInfoWidget.setContentLayout(tempLayout)
+            templabel = QLabel("No data found!!")
+            self.leftInfoWidget.contentLayout().addWidget(templabel)
+        else:
+            self.selectedItem = ind
+            detailsData = self.labwareData[ind]["details"]
+            self.clearLayout(self.leftInfoWidget.contentLayout())
+            tempLayout = QVBoxLayout()
+            self.leftInfoWidget.setContentLayout(tempLayout)
+            for x in detailsData:
+                dataWidget = QWidget()
+                dataWidgetLayout = QVBoxLayout(dataWidget)
+                label = QLabel(f'{x["label"]}  ')
+                font = QFont("Arial", 12)
+                font.setBold(True)
+                label.setFont(font)
+                value = QLabel(x["value"])
+                value.setFont(QFont("Arial", 10))
+                value.setStyleSheet("color: #BDD5F9;")
+                dataWidgetLayout.addWidget(label)
+                dataWidgetLayout.addWidget(value)
+                self.leftInfoWidget.contentLayout().addWidget(dataWidget)
+                
+    def loadSelectedCards(self):
+        if len(self.addedLabwares) == 0:
+            self.clearLayout(self.rightStackWidget.contentLayout())
+            tempLayout = QVBoxLayout()
+            self.rightStackWidget.setContentLayout(tempLayout)
+            templabel = QLabel("No Labwares Added!!")
+            templabel.setStyleSheet("color: #BDD5F9;")
+            self.rightStackWidget.contentLayout().addWidget(templabel)
+            self.rightStackWidget.contentLayout().addStretch(1)
+        else:
+            self.clearLayout(self.rightStackWidget.contentLayout())
+            tempLayout = QVBoxLayout()
+            self.rightStackWidget.setContentLayout(tempLayout)
+            
+            for x in self.addedLabwares:
+                card = LabwareStackCard(self,x)
+                self.rightStackWidget.contentLayout().addWidget(card)
+            
+            self.rightStackWidget.contentLayout().addStretch(1)
+                
+        
+        
