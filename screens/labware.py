@@ -9,7 +9,7 @@ from utilities.utils import Utils
 from utilities.constants import LABWARE_CARD
 from widgets.labware_card import LabwareCard
 from widgets.labware_stack_card import LabwareStackCard
-    
+
         
 
 class LabwareScreen(QWidget):
@@ -161,6 +161,7 @@ class LabwareScreen(QWidget):
 
     def handleSave(self,parentObj):
         # Logic to save labware configuration
+        parentObj.labware_screen = self.addedLabwares
         ToastWidget(self,"Success!","Values saved successfully.", "success",3000)
     
     def handleTypeChange(self,text,optionBInput):

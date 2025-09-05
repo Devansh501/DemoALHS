@@ -10,12 +10,15 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setObjectName("Global")
+        
+        # The Parent Object
+        self.parentObj = {}
         # Load QSS
         stylesheet = Utils.load_stylesheet("globals.qss")
         self.setStyleSheet(stylesheet)
 
-        self.showFullScreen()
-        # self.setFixedSize(1024, 600)
+        # self.showFullScreen()
+        self.setFixedSize(1024, 600)
 
         # Use a QStackedWidget to hold and switch screens
         self.stack = QStackedWidget()
@@ -86,5 +89,17 @@ class MainWindow(QMainWindow):
         elif screen_name == "labware":
             from screens.labware import LabwareScreen
             return LabwareScreen(self)
+        elif screen_name == "deck_arrng":
+            from screens.deck_arrng import DeckArrangement
+            return DeckArrangement(self)
+        elif screen_name == "pipette_selectn":
+            from screens.pipette_selectn import PipetteSelection
+            return PipetteSelection(self)
+        elif screen_name == "reagent_config":
+            from screens.reagent_config import ReagentConfiguration
+            return ReagentConfiguration(self)
+        elif screen_name == "calibration":
+            from calibration.calibration_screen import CalibrationScreen
+            return CalibrationScreen()
         else:
             raise ValueError(f"Unknown screen: {screen_name}")

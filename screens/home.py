@@ -4,6 +4,7 @@ from PyQt5.QtGui import QFont
 from widgets.icon_button import IconButton
 from widgets.heading import Heading
 from widgets.menu_button import MenuButton
+from widgets.warning_dialog import WarningDialog
 import sys
 
 class HomeScreen(QWidget):
@@ -35,7 +36,7 @@ class HomeScreen(QWidget):
         pipetteButton = MenuButton("Pipette")
         labwareButton = MenuButton("Labware")
         quickLoadButton = MenuButton("Quick Load")
-        newProtocolButton = MenuButton("New Protocol")
+        newProtocolButton = MenuButton("New")
 
         screen1GridLayout.addWidget(pipetteButton, 0, 0)
         screen1GridLayout.addWidget(labwareButton, 0, 1)
@@ -61,6 +62,8 @@ class HomeScreen(QWidget):
 
         pipetteButton.clicked.connect(lambda: parentObj.router("pipette_config"))
         labwareButton.clicked.connect(lambda: parentObj.router("labware"))
+        newProtocolButton.clicked.connect(lambda: self.newProtocolHandle(parentObj))
+        
 
         # Funtionality End
 
@@ -96,6 +99,9 @@ class HomeScreen(QWidget):
         screen2LayoutWrapper.addStretch()
         screen2LayoutWrapper.addWidget(screen2MainCover)
         screen2LayoutWrapper.addStretch()
+        
+        # Functionality
+        calibrationButton.clicked.connect(lambda: parentObj.router("calibration"))
 
         # # Buttons
         self.button1 = IconButton(
@@ -193,3 +199,25 @@ class HomeScreen(QWidget):
         anim2.start()
         self.anim1 = anim1
         self.anim2 = anim2
+    
+    def newProtocolHandle(self,parentObj):
+        if(getattr(parentObj,"pipette_screen", None) is None and getattr(parentObj,"labware_screen", None) is None):
+            dialog = WarningDialog(
+            "Pipette and Labwares Configuration are missing!!",
+            icon_path=":icons/warning.png",
+            parent=self)
+            result = dialog.exec_()
+        elif(getattr(parentObj,"pipette_screen", None) is None):
+            dialog = WarningDialog(
+            "Pipette Configuration is missing!!",
+            icon_path=":icons/warning.png",
+            parent=self)
+            result = dialog.exec_()
+        elif(getattr(parentObj,"labware_screen", None) is None):
+            dialog = WarningDialog(
+            "Labware Configuration is missing!!",
+            icon_path=":icons/warning.png",
+            parent=self)
+            result = dialog.exec_()
+        else:
+            parentObj.router("deck_arrng")

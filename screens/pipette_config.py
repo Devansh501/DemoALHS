@@ -8,6 +8,11 @@ from widgets.toast import ToastWidget
 class PipetteConfigScreen(QWidget):
     def __init__(self, parentObj):
         super().__init__()
+        
+        self.screen_data = {
+            "pipette_type":"Single Channel",
+            "pipette_capacity": "50ul"
+        }
 
         screenLayoutWrapper = QVBoxLayout(self)
         
@@ -26,7 +31,9 @@ class PipetteConfigScreen(QWidget):
         pipTypeWidgetLayout.addWidget(Heading("Pipette Type: ", level=5))
         pipTypeSelector = ThemedSelector(size="small")
         pipTypeSelector.addItems(["Single Channel", "Multi Channel"])
+        pipTypeSelector.setCurrentIndex(0)
         pipTypeWidgetLayout.addWidget(pipTypeSelector)
+        pipTypeSelector.currentTextChanged.connect(lambda text: self.screen_data.update({"pipette_type":text}))
 
         pipCapacityWidget = QWidget()
         pipCapacityWidgetLayout = QHBoxLayout(pipCapacityWidget)
@@ -34,6 +41,7 @@ class PipetteConfigScreen(QWidget):
         pipCapacitySelector = ThemedSelector(size="small")
         pipCapacitySelector.addItems(["50ul","100ul","200ul"])
         pipCapacityWidgetLayout.addWidget(pipCapacitySelector)
+        pipCapacitySelector.currentTextChanged.connect(lambda text: self.screen_data.update({"pipette_capacity":text}))
 
         leftAreaWidgetLayout.addStretch(3)
         leftAreaWidgetLayout.addWidget(pipTypeWidget)
@@ -83,3 +91,4 @@ class PipetteConfigScreen(QWidget):
     def handleSave(self,parentObj):
         # Logic to save pipette configuration
         ToastWidget(self,"Success!","Values saved successfully.", "success",3000)
+        parentObj.pipette_screen = self.screen_data

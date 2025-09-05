@@ -16,9 +16,11 @@ CLICKABLE = {
     "fontSizeSmall": 12,
     "fontSizeMedium": 14,
     "fontSizeLarge": 16,
+    "fontSizelongSmall":12,
     "btnSizeLarge": QSize(160, 48),
     "btnSizeMedium": QSize(120, 36),
-    "btnSizeSmall": QSize(90, 28)
+    "btnSizeSmall": QSize(90, 28),
+    "btnSizeLongSmall": QSize(250,28)
 }
 
 

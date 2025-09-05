@@ -52,7 +52,7 @@ class DynamicButton(QWidget):
 LABEL_SIZE = 32
 BUTTON_SIZE = 32
 
-class ButtonGridWidget(QWidget):
+class ButtonGridWidgetMulti(QWidget):
     def __init__(self, rows, cols):
         super().__init__()
         self.rows = rows

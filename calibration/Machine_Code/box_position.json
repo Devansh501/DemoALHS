@@ -1,0 +1,67 @@
+{
+    "Plasticus_Tip_Box":{
+        "plasticus_A1_X_val": 3.8,
+        "plasticus_A12_X_val": 102.7,
+        "plasticus_H1_X_val": 3.4,
+        "plasticus_H12_X_val": 103.1,
+
+        "plasticus_A1_Y_val": 14.5,
+        "plasticus_A12_Y_val": 14.5,
+        "plasticus_H1_Y_val": 77.7,
+        "plasticus_H12_Y_val": 78.2,
+
+        "plasticus_m_val":8,
+        "plasticus_n_val":12
+    },
+
+    "Plasticus_well_Plate_one": {
+        "plasticus_well_A1_X_val": 149.2,
+        "plasticus_well_A12_X_val":  247.5,
+        "plasticus_well_H1_X_val": 148.5,
+        "plasticus_well_H12_X_val":  247.5,
+
+        "plasticus_well_A1_Y_val": 15.4,
+        "plasticus_well_A12_Y_val":  16.4,
+        "plasticus_well_H1_Y_val": 78.9,
+        "plasticus_well_H12_Y_val":  79.6,
+
+        "plasticus_well_m_val":8,
+        "plasticus_well_n_val":12
+    },
+
+    "Plasticus_well_Plate_two": {
+        "plasticus_well_A1_X_val": 145.0,
+        "plasticus_well_A12_X_val":  244.3,
+        "plasticus_well_H1_X_val": 145.3,
+        "plasticus_well_H12_X_val":  244.1,
+
+        "plasticus_well_A1_Y_val": 122.7,
+        "plasticus_well_A12_Y_val":  122.7,
+        "plasticus_well_H1_Y_val": 185.7,
+        "plasticus_well_H12_Y_val":  185.7,
+
+        "plasticus_well_m_val":8,
+        "plasticus_well_n_val":12
+    },
+
+    "Ejection_Box" : {
+        "x": 354.3,
+        "y": 97.7
+    },
+
+    "Reagent_Box":{
+        "First_Reagent_Box_X": 14.3,
+        "First_Reagent_Box_Y": 167.7,
+        
+        "Second_Reagent_Box_X": 44.3,
+        "Second_Reagent_Box_Y": 167.7,
+        
+        "Third_Reagent_Box_X": 74.3,
+        "Third_Reagent_Box_Y": 167.7,
+        
+        "Fourth_Reagent_Box_X": 104.3,
+        "Fourth_Reagent_Box_Y": 167.7
+    }
+
+
+}

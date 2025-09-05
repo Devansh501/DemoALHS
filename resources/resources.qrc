@@ -14,6 +14,7 @@
         <file alias="rightArrow.png">icons/right_arrow.png</file>
         <file alias="info.png">icons/info.png</file>
         <file alias="delete.png">icons/delete.png</file>
+        <file alias="warning.png">icons/warning.png</file>
     </qresource>
 
     <qresource prefix="/images">

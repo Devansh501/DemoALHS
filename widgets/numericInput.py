@@ -13,13 +13,15 @@ class ThemedInputField(QWidget):
     SIZE_MAP = {
         "large": CLICKABLE["btnSizeLarge"],
         "medium": CLICKABLE["btnSizeMedium"],
-        "small": CLICKABLE["btnSizeSmall"]
+        "small": CLICKABLE["btnSizeSmall"],
+        "longsmall": CLICKABLE["btnSizeLongSmall"]
     }
 
     FONT_SIZE_MAP = {
         "large": CLICKABLE["fontSizeLarge"],
         "medium": CLICKABLE["fontSizeMedium"],
-        "small": CLICKABLE["fontSizeSmall"]
+        "small": CLICKABLE["fontSizeSmall"],
+        "longsmall": CLICKABLE["fontSizelongSmall"]
     }
 
     COLORS = {
