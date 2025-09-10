@@ -46,7 +46,7 @@ class PipetteSelection(QWidget):
         backButton = ThemedButton("Back")
         nextButton = ThemedButton("Next")
         
-        backButton.clicked.connect(lambda: parentObj.router('deck_arrng'))
+        backButton.clicked.connect(lambda: parentObj.router('home'))
         nextButton.clicked.connect(lambda: parentObj.router('reagent_config'))
         
         navLayout.addWidget(backButton)

@@ -153,7 +153,15 @@ class ThemedSelector(QComboBox):
     def addItems(self, texts):
         """Override to adjust size when items are added"""
         super().addItems(texts)
+        self.setCurrentIndex(0)
         self.updateGeometry()  # Force size recalculation
+        
+    # for replacing options   
+    def setItems(self,texts):
+        self.clear()
+        self.addItems(texts)
+        if texts:
+            self.setCurrentIndex(0)
 
     def sizeHint(self):
         """Calculate perfect size based on content"""

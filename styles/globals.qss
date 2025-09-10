@@ -5,7 +5,7 @@ QMainWindow#Global{
                     stop: 0 #0c3e66,
                     stop: 1 #b2d3f2
                 ); */
-    background: #3e5d77
+    background: #0d314e
 
 }
 

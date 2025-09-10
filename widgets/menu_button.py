@@ -10,9 +10,9 @@ from utilities.constants import MENU_BUTTON
 class MenuButton(QWidget):
     clicked = pyqtSignal()  # ✅ Custom signal
 
-    def __init__(self, text="", fontSize=22, parent=None):
+    def __init__(self, text="", fontSize=22,btnHeight = MENU_BUTTON['height'],btnWidth = MENU_BUTTON['length'],parent=None):
         super().__init__(parent)
-        self.setFixedSize(MENU_BUTTON['length'], MENU_BUTTON['height'])
+        self.setFixedSize(btnWidth, btnHeight)
         self._text = text
 
         font_name = FontManager.get_font(MENU_BUTTON['font_name'])

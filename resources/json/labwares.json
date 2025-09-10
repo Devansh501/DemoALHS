@@ -169,7 +169,7 @@
     "name": "Reservoir with SureFlo",
     "details": [
       { "label": "Volume", "value": "25mL" },
-      { "label": "Channels", "value": "1" },
+      { "label": "Channels", "value": "2" },
       { "label": "Material", "value": "Polystyrene" },
       { "label": "Feature", "value": "SureFlo anti-sealing array" }
     ],
@@ -182,7 +182,7 @@
     "name": "Reagent Reservoir",
     "details": [
       { "label": "Volume", "value": "25mL" },
-      { "label": "Channels", "value": "1" },
+      { "label": "Channels", "value": "3" },
       { "label": "Sterility", "value": "Sterile" },
       { "label": "Feature", "value": "V-shaped bottom" }
     ],
@@ -195,7 +195,7 @@
     "name": "Nunc Reagent Reservoir",
     "details": [
       { "label": "Volume", "value": "50mL" },
-      { "label": "Channels", "value": "1" },
+      { "label": "Channels", "value": "4" },
       { "label": "Material", "value": "Polypropylene" },
       { "label": "Feature", "value": "Divided for multiple reagents" }
     ],
@@ -221,7 +221,7 @@
     "name": "Alpha-Plus Reservoir",
     "details": [
       { "label": "Volume", "value": "100mL" },
-      { "label": "Channels", "value": "1" },
+      { "label": "Channels", "value": "5" },
       { "label": "Material", "value": "Polypropylene" },
       { "label": "Feature", "value": "Graduated" }
     ],

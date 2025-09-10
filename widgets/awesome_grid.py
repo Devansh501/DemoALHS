@@ -149,7 +149,6 @@ class ButtonGridWidget(QWidget):
             end_pos = e.touchPoints()[0].pos().toPoint()
             # For Linux
             if not self.dragging:
-                print("Single Tap")
                 self.toggle_button_at(end_pos)
             # For Windows Comment out
             self.dragging = False
@@ -167,10 +166,8 @@ class ButtonGridWidget(QWidget):
     
     def onChecked(self, btnObject):
         self.selected_buttons.add((btnObject.x, btnObject.y))
-        print(self.selected_buttons)
-        print("--------------------------------")
+        
     
     def onUnchecked(self, btnObject):
         self.selected_buttons.discard((btnObject.x, btnObject.y))
-        print(self.selected_buttons)
-        print("--------------------------------")
+        

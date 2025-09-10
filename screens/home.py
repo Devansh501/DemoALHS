@@ -220,4 +220,4 @@ class HomeScreen(QWidget):
             parent=self)
             result = dialog.exec_()
         else:
-            parentObj.router("deck_arrng")
+            parentObj.router("pipette_selectn")

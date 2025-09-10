@@ -35,7 +35,7 @@ class CalibrationScreen(QWidget):
         self.setStyleSheet(Styles.BACKGROUND)
         file_path = "calibration/Machine_Code/start_up_values.json"
         if os.path.exists(file_path):
-            print("howdy")
+
             with open(file_path, "r") as f:
                 data = json.load(f)
         self.XCoOrdinate=float(data["OFFSETS_X"])
@@ -337,7 +337,6 @@ class CalibrationScreen(QWidget):
 
     def update_label(self, index):
          self.stepSize = self.mapping[index]
-        #  print(self.stepSize)
 
     def make_button(self, text, w, h, rounded=False):
         btn = QPushButton(text)
