@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import QVBoxLayout, QWidget,QHBoxLayout, QGraphicsDropShadowEffect,QLabel,QApplication, QGridLayout, QSpacerItem, QSizePolicy
 from PyQt5.QtGui import QColor, QFont
+from PyQt5.QtCore import QTimer
 from widgets.heading import Heading
 from widgets.button import ThemedButton
 from widgets.newSelector import ThemedSelector
@@ -9,6 +10,7 @@ from utilities.utils import Utils
 from utilities.constants import LABWARE_CARD
 from widgets.labware_card import LabwareCard
 from widgets.labware_stack_card import LabwareStackCard
+from widgets.status_popup import StatusPopup
 
         
 
@@ -162,7 +164,8 @@ class LabwareScreen(QWidget):
     def handleSave(self,parentObj):
         # Logic to save labware configuration
         parentObj.labware_screen = self.addedLabwares
-        ToastWidget(self,"Success!","Values saved successfully.", "success",3000)
+        StatusPopup("Saved Selection!", status="success", duration=1500)
+        QTimer.singleShot(1800, lambda: parentObj.router("home"))
     
     def handleTypeChange(self,text,optionBInput):
         optionBInput.clear()
@@ -192,7 +195,6 @@ class LabwareScreen(QWidget):
         rows = len(self.filteredLabwares)
         grid = QGridLayout()
         grid.setSpacing(22)
-        self
         self.middleScrollArea.setContentLayout(grid)
         c=0
         r=0

@@ -100,8 +100,8 @@ class ButtonGridWidget(QWidget):
         radius = 20
 
         gradient = QLinearGradient(rect.topLeft(), rect.bottomRight())
-        gradient.setColorAt(0, QColor("#e0e0e0"))
-        gradient.setColorAt(1, QColor("#c0c0c0"))
+        gradient.setColorAt(0, QColor("#ffffff"))
+        gradient.setColorAt(1, QColor("#ffffff"))
 
         path = QPainterPath()
         path.addRoundedRect(QRectF(rect), radius, radius)

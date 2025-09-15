@@ -100,6 +100,6 @@ class MainWindow(QMainWindow):
             return ReagentConfiguration(self)
         elif screen_name == "calibration":
             from calibration.calibration_screen import CalibrationScreen
-            return CalibrationScreen()
+            return CalibrationScreen(self)
         else:
             raise ValueError(f"Unknown screen: {screen_name}")

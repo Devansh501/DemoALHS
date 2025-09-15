@@ -1,9 +1,11 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QGridLayout
+from PyQt5.QtCore import QTimer
 from widgets.button import ThemedButton
 from widgets.newSelector import ThemedSelector
 from widgets.heading import Heading
 from widgets.info_card import InfoCard
 from widgets.toast import ToastWidget
+from widgets.status_popup import StatusPopup
 
 class PipetteConfigScreen(QWidget):
     def __init__(self, parentObj):
@@ -90,5 +92,6 @@ class PipetteConfigScreen(QWidget):
     
     def handleSave(self,parentObj):
         # Logic to save pipette configuration
-        ToastWidget(self,"Success!","Values saved successfully.", "success",3000)
         parentObj.pipette_screen = self.screen_data
+        StatusPopup("Saved Selection!", status="success", duration=1500)
+        QTimer.singleShot(1800,lambda: parentObj.router("home"))

@@ -39,7 +39,7 @@ class ScrollableWidget(QWidget, QObject):
         # Scroll area
         self.scroll = QScrollArea(self)
         self.scroll.setWidgetResizable(True)
-        self.setStyleSheet("background: transparent;")
+        self.setStyleSheet("background: transparent;outline:none;border:0px solid #ffffff;")
 
         # Content widget (holds user layout)
         self.content = QWidget()

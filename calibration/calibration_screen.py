@@ -23,11 +23,12 @@ from PyQt5.QtGui import QColor
 from .styles import Styles
 from .triggers import Triggers
 from functools import partial
+from widgets.button import ThemedButton
 import json
 import os
 
 class CalibrationScreen(QWidget):
-    def __init__(self):
+    def __init__(self,parentObj):
         super().__init__()
         self.setWindowTitle("CALIBRATION")
         # self.resize(1200, 600)  # default size
@@ -42,10 +43,10 @@ class CalibrationScreen(QWidget):
         self.YCoOrdinate=float(data["OFFSETS_Y"])
         self.ZCoOrdinate=float(data["OFFSETS_Z"])
         self.stepSize = float(.1)
-        self.init_ui()
+        self.init_ui(parentObj)
 
 
-    def init_ui(self):
+    def init_ui(self,parentObj):
         # Title at top
         title = QLabel("Calibration")
         title.setAlignment(Qt.AlignCenter)
@@ -331,7 +332,24 @@ class CalibrationScreen(QWidget):
 
         # extra padding below body
         main_layout.addSpacing(20)
-
+        
+        navLayout = QHBoxLayout()
+        backButton = ThemedButton("Back")
+        homeButton = ThemedButton("Home")
+        
+        navLayout.addWidget(backButton)
+        navLayout.addStretch()
+        navLayout.addWidget(homeButton)
+        
+        if hasattr(parentObj,"labware_screen"):
+            backButton.clicked.connect(lambda: parentObj.router("reagent_config"))
+        else:
+            backButton.clicked.connect(lambda: parentObj.router("home"))
+            
+        homeButton.clicked.connect(lambda: parentObj.router("home"))
+        
+        main_layout.addLayout(navLayout)
+        
         self.setLayout(main_layout)
     
 
