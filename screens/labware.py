@@ -11,7 +11,7 @@ from utilities.constants import LABWARE_CARD
 from widgets.labware_card import LabwareCard
 from widgets.labware_stack_card import LabwareStackCard
 from widgets.status_popup import StatusPopup
-
+from widgets.warning_dialog import WarningDialog
         
 
 class LabwareScreen(QWidget):
@@ -27,8 +27,7 @@ class LabwareScreen(QWidget):
             "make": 'All'
         }
         self.infoSectionId = 0
-        # stylesheet = Utils.load_stylesheet("globals.qss")
-        # self.setStyleSheet(stylesheet)
+  
         self.middleScrollArea = ScrollableWidget()
         self.labwareData = Utils.load_json("labwares.json")
         self.filteredLabwares = self.labwareData
@@ -39,7 +38,6 @@ class LabwareScreen(QWidget):
         screenDimensions = QApplication.primaryScreen().size()
         screenLayoutWrapper = QVBoxLayout(self)
 
-        
         # Heading
         mainHeading = Heading("Labware",level=1)
         screenLayoutWrapper.addWidget(mainHeading)
@@ -163,6 +161,16 @@ class LabwareScreen(QWidget):
 
     def handleSave(self,parentObj):
         # Logic to save labware configuration
+        resevoirCount =  sum(1 for obj in self.addedLabwares if obj["type"] == "Reservoir")
+        
+        if len(self.addedLabwares)==0:
+            dialog = WarningDialog("No Added Labwares",parent=self)
+            dialog.exec_()
+            return
+        elif resevoirCount == 0:
+            dialog = WarningDialog("No Reservoir Added",parent=self)
+            dialog.exec_()
+            return
         parentObj.labware_screen = self.addedLabwares
         StatusPopup("Saved Selection!", status="success", duration=1500)
         QTimer.singleShot(1800, lambda: parentObj.router("home"))
