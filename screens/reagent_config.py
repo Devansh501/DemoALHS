@@ -166,19 +166,32 @@ class ReagentConfiguration(QWidget):
         self.reservoirCapacity = int(self.get_channels(self.reservoirDataAvailable,text,"Volume")[:-2])
         
     def handleQuantityInput(self,text):
-        if text=='':
-            text='0'
-        inpValue = int(float(text))
-        allowedValue = int(self.reservoirCapacity)
-        if(allowedValue<inpValue):
-            self.reagentQuantity.line_edit.setText(f"{allowedValue}")
-        if(inpValue<0):
+        if (not self.currentReagentSelected 
+             or "reagentName" not in self.currentReagentSelected 
+             or len(self.currentReagentSelected["reagentName"]) <= 0
+            ):
+            dialog = WarningDialog("Select Reagent and Reservoir first!!")
+            dialog.exec_()
+            self.reagentQuantity.line_edit.blockSignals(True)
             self.reagentQuantity.line_edit.setText("0")
-        
-        inpValue = int(float(self.reagentQuantity.text()) if len(self.reagentQuantity.text()) > 0 else "0")
-        percent = int((inpValue/self.reservoirCapacity)*100)
-        self.leftBeaker.setFillColorAndAnimate(self.currentReagentSelected["reagentColor"])
-        self.leftBeaker.setFillPercent(percent)
+            self.reagentQuantity.line_edit.blockSignals(False)
+        else:    
+            if text=='':
+                text='0'
+            inpValue = int(float(text))
+            allowedValue = int(self.reservoirCapacity)
+            self.reagentQuantity.line_edit.blockSignals(True)
+            if(allowedValue<inpValue):
+                self.reagentQuantity.line_edit.setText(f"{allowedValue}")
+            if(inpValue<0):
+                self.reagentQuantity.line_edit.setText("0")
+            self.reagentQuantity.line_edit.blockSignals(False)
+            
+            inpValue = int(float(self.reagentQuantity.text()) if len(self.reagentQuantity.text()) > 0 else "0")
+            percent = int((inpValue/self.reservoirCapacity)*100)
+            self.leftBeaker.setFillColorAndAnimate(self.currentReagentSelected["reagentColor"])
+            self.leftBeaker.setFillPercent(percent)
+            
         
     def handleAddEntry(self):
         if (not self.currentReagentSelected 
@@ -192,5 +205,5 @@ class ReagentConfiguration(QWidget):
             dialog = WarningDialog("Values not entered!!")
             dialog.exec_()
         else:
-            self.rightTable.add_row([self.reservoirSelector.currentText(),self.wellSelector.currentText(),self.currentReagentSelected["reagentName"],self.reagentQuantity.text()])
-            self.reagentQuantity.setValue(f"{int(float('0'))}")
+            self.rightTable.add_row([self.reservoirSelector.currentText(),self.wellSelector.currentText(),self.currentReagentSelected["reagentName"],self.reagentQuantity.text()]) 
+            self.reagentQuantity.line_edit.setText("0")
