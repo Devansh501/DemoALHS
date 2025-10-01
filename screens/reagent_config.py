@@ -70,7 +70,7 @@ class ReagentConfiguration(QWidget):
         upCenterLayout = QGridLayout()
         self.wellSelector = ThemedSelector()
         self.reservoirSelector = ThemedSelector()
-        self.reagentSelector = ThemedSelector()
+        self.reagentSelector = ThemedSelector(placeholder="Add Reagent")
         self.reagentQuantity = ThemedInputField()
         reservoirOptions = list(map(lambda x: x["name"],self.reservoirDataAvailable))   
         self.reservoirSelector.currentTextChanged.connect(lambda text: self.handleReservoirChange(text))

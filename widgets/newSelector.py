@@ -21,8 +21,11 @@ class PerfectDelegate(QStyledItemDelegate):
 
 
 class ThemedSelector(QComboBox):
-    def __init__(self, parent=None, size="medium", bold=False, **kwargs):
+    def __init__(self, parent=None, size="medium", bold=False, placeholder="Select an option...", **kwargs):
         super().__init__(parent)
+
+        # Store placeholder
+        self._placeholder = placeholder
 
         # Size configuration
         self._size_type = size
@@ -58,7 +61,7 @@ class ThemedSelector(QComboBox):
         self.setStyleSheet(f"""
             QComboBox {{
                 background: {Utils.color_to_rgba_str(CLICKABLE['primary'])};
-                color: white;  /* force combobox text to white */
+                color: white;
                 border: 1px solid {Utils.color_to_rgba_str(CLICKABLE['border'])};
                 border-radius: 6px;
                 padding: 6px 30px 6px 12px;
@@ -74,19 +77,22 @@ class ThemedSelector(QComboBox):
                 border: none;
                 margin: 0px;
                 padding: 0px;
-                outline: 0;  /* remove faint lines */
+                outline: 0;
             }}
             QComboBox QAbstractItemView::item {{
                 margin: 0px;
                 padding: 4px 8px;
                 height: {self._font.pointSize() + 8}px;
-                color: white;  /* dropdown text white */
+                color: white;
             }}
             QComboBox QAbstractItemView::item:selected {{
                 background: #257bbf;
-                color: white;  /* keep text white when selected */
+                color: white;
             }}
         """)
+
+        # Start with placeholder visible
+        self.setCurrentIndex(-1)
 
     def showPopup(self):
         """Ensure dropdown matches content width exactly and no extra whitespace"""
@@ -94,11 +100,11 @@ class ThemedSelector(QComboBox):
         self.view().setMinimumWidth(width)
         self.view().setFixedWidth(width)
 
-        # Force the popup container background (fixes white top/bottom strips + faint frame)
+        # Force the popup container background
         popup = self.view().window()
         popup.setStyleSheet(f"""
             background: {Utils.color_to_rgba_str(CLICKABLE['primary'])};
-            border: none;  /* remove faint frame */
+            border: none;
             border-radius: 6px;
             margin: 0px;
             padding: 0px;
@@ -109,11 +115,12 @@ class ThemedSelector(QComboBox):
     def _calculate_dropdown_width(self):
         """Calculate exact width needed for the longest item"""
         fm = self.fontMetrics()
+        if self.count() == 0:
+            return self.width()
         max_width = max(fm.horizontalAdvance(self.itemText(i)) for i in range(self.count())) + 40
         return max(self.width(), max_width)
 
     def paintEvent(self, event):
-        from utilities.constants import CLICKABLE
         painter = QPainter(self)
         painter.setRenderHint(QPainter.Antialiasing)
 
@@ -126,21 +133,26 @@ class ThemedSelector(QComboBox):
         painter.setPen(QPen(QColor(CLICKABLE['border']), 1))
         painter.drawRoundedRect(rect, 6, 6)
 
-        # Draw text
-        text = self.currentText()
-        text_rect = QRect(rect)
-        text_rect.adjust(12, 0, -30, 0)  # Proper padding
+        # Decide whether to show placeholder or current text
+        if self.count() == 0 or self.currentIndex() == -1:
+            text = self._placeholder
+            text_color = QColor(200, 200, 200)  # gray for placeholder
+        else:
+            text = self.currentText()
+            text_color = QColor("white")
 
+        # Draw text
+        text_rect = QRect(rect)
+        text_rect.adjust(12, 0, -30, 0)
         painter.setFont(self._font)
-        painter.setPen(QColor("white"))  # force text to white
+        painter.setPen(text_color)
         painter.drawText(text_rect, Qt.AlignVCenter | Qt.AlignLeft, text)
 
         # Draw arrow
         arrow_size = 6
         arrow_x = rect.right() - 18
         arrow_y = rect.center().y()
-
-        painter.setBrush(QColor("white"))  # arrow white too
+        painter.setBrush(QColor("white"))
         painter.setPen(Qt.NoPen)
         painter.drawPolygon(
             QPoint(arrow_x, arrow_y - arrow_size // 2),
@@ -153,21 +165,29 @@ class ThemedSelector(QComboBox):
     def addItems(self, texts):
         """Override to adjust size when items are added"""
         super().addItems(texts)
-        self.setCurrentIndex(0)
-        self.updateGeometry()  # Force size recalculation
-        
-    # for replacing options   
-    def setItems(self,texts):
+        if texts:
+            self.setCurrentIndex(0)
+        else:
+            self.setCurrentIndex(-1)
+        self.updateGeometry()
+
+    def setItems(self, texts):
+        """Replace all items and reset selection"""
         self.clear()
         self.addItems(texts)
         if texts:
             self.setCurrentIndex(0)
+        else:
+            self.setCurrentIndex(-1)
 
     def sizeHint(self):
         """Calculate perfect size based on content"""
         fm = self.fontMetrics()
-        text_width = max(
-            fm.horizontalAdvance(text)
-            for text in [self.itemText(i) for i in range(self.count())] + [self.currentText()]
-        )
-        return QSize(text_width + 50, 36)  # Width padding + standard height
+        if self.count() == 0:
+            text_width = fm.horizontalAdvance(self._placeholder)
+        else:
+            text_width = max(
+                fm.horizontalAdvance(text)
+                for text in [self.itemText(i) for i in range(self.count())] + [self.currentText()]
+            )
+        return QSize(text_width + 50, 36)

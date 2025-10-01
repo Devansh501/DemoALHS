@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QMainWindow, QStackedWidget, QWidget
-from PyQt5.QtCore import QPropertyAnimation, QEasingCurve, QRect, QObject, pyqtSlot
+from PyQt5.QtCore import QPropertyAnimation, QEasingCurve, QRect, QObject, pyqtSlot, QTimer
 from pathlib import Path
 from resources import resources
 from utilities.utils import Utils
@@ -31,7 +31,7 @@ class MainWindow(QMainWindow):
         self.anim_out = None
 
         # Start with the home screen
-        self.router("home", animate=False)
+        self.router("splash", animate=False)
 
     def router(self, screen_name: str, animate=True):
         new_widget = self.load_screen(screen_name)
@@ -101,5 +101,10 @@ class MainWindow(QMainWindow):
         elif screen_name == "calibration":
             from calibration.calibration_screen import CalibrationScreen
             return CalibrationScreen(self)
+        elif screen_name == "splash":
+            from screens.splash import AnimatedSplash
+            splash = AnimatedSplash()
+            splash.finished.connect(lambda: self.router("home", animate=True))
+            return splash
         else:
             raise ValueError(f"Unknown screen: {screen_name}")

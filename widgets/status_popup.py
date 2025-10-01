@@ -28,6 +28,7 @@ def make_success_icon(size=96):
     painter.end()
     return pixmap
 
+
 def make_failure_icon(size=96):
     pixmap = QPixmap(size, size)
     pixmap.fill(Qt.transparent)
@@ -45,12 +46,13 @@ def make_failure_icon(size=96):
     painter.end()
     return pixmap
 
-# ----------- Popup Widget (Transparent, Only Icon + Text) -----------
+
+# ----------- Popup Dialog (Opaque, Centered) -----------
 class StatusPopup(QWidget):
     def __init__(self, message, status="success", duration=2000, parent=None):
         super().__init__(parent)
 
-        # Transparent overlay
+        # Frameless floating dialog
         self.setWindowFlags(
             Qt.FramelessWindowHint
             | Qt.Tool
@@ -58,32 +60,49 @@ class StatusPopup(QWidget):
         )
         self.setAttribute(Qt.WA_TranslucentBackground, True)
 
-        # Full screen transparent widget
+        # Known final size
+        # self.popup_width = 280
+        # self.popup_height = 180
+        # self.resize(self.popup_width, self.popup_height)
         screen_geom = QApplication.primaryScreen().availableGeometry()
         self.setGeometry(screen_geom)
 
-        # Layout (centered, no background box)
-        layout = QVBoxLayout(self)
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.setAlignment(Qt.AlignCenter)
+        # Outer layout
+        main_layout = QVBoxLayout(self)
+        main_layout.setContentsMargins(0, 0, 0, 0)
+        main_layout.setAlignment(Qt.AlignCenter)
+
+        # Container with rounded opaque background
+        container = QWidget()
+        container.setObjectName("popupContainer")
+        container.setStyleSheet("""
+            QWidget#popupContainer {
+                background-color: rgba(40, 40, 40, 230);
+                border-radius: 16px;
+            }
+        """)
+
+        inner_layout = QVBoxLayout(container)
+        inner_layout.setContentsMargins(30, 30, 30, 30)
+        inner_layout.setSpacing(12)
+        inner_layout.setAlignment(Qt.AlignCenter)
 
         # Icon
         self.icon_label = QLabel()
         self.icon_label.setAlignment(Qt.AlignCenter)
-        if status == "success":
-            pixmap = make_success_icon(96)
-        else:
-            pixmap = make_failure_icon(96)
+        pixmap = make_success_icon(80) if status == "success" else make_failure_icon(80)
         self.icon_label.setPixmap(pixmap)
 
         # Message
         self.message_label = QLabel(message)
-        self.message_label.setFont(QFont("Arial", 16, QFont.Bold))
+        self.message_label.setFont(QFont("Arial", 14, QFont.Bold))
         self.message_label.setStyleSheet("color: white; background: transparent;")
         self.message_label.setAlignment(Qt.AlignCenter)
 
-        layout.addWidget(self.icon_label)
-        layout.addWidget(self.message_label)
+        # Add widgets
+        inner_layout.addWidget(self.icon_label)
+        inner_layout.addWidget(self.message_label)
+        main_layout.addWidget(container)
 
         # Auto-close
         QTimer.singleShot(duration, self.close)
@@ -96,7 +115,18 @@ class StatusPopup(QWidget):
         self.anim.setEndValue(1.0)
         self.anim.start()
 
+        # Show widget
         self.show()
+
+    def showEvent(self, event):
+        """Center popup on screen after layout is calculated"""
+        super().showEvent(event)
+        screen_geom = QApplication.primaryScreen().availableGeometry()
+        w, h = self.width(), self.height()
+        x = screen_geom.center().x() - w // 2
+        y = screen_geom.center().y() - h // 2
+        self.setGeometry(x, y, w, h)
+
 
 # ----------- Test Window -----------
 class TestWindow(QWidget):
@@ -119,9 +149,9 @@ class TestWindow(QWidget):
         layout.addWidget(success_btn)
         layout.addWidget(fail_btn)
 
+
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     win = TestWindow()
     win.show()
     sys.exit(app.exec_())
-  
