@@ -113,9 +113,19 @@ class ReagentConfiguration(QWidget):
         navLayout.addWidget(nextButton)
         
         backButton.clicked.connect(lambda: parentObj.router('pipette_selectn'))
-        nextButton.clicked.connect(lambda: parentObj.router('calibration'))
+        nextButton.clicked.connect(lambda: self.nextScreenTrigger(parentObj))
     
         screenWrapperLayout.addLayout(navLayout)
+    
+    
+    def nextScreenTrigger(self,parentObj):
+        parentObj.reagent_screen = {
+            "reagentsConfigured": {}
+        }
+        parentObj.reagent_screen["reagentsConfigured"] = self.reagents
+        print(f" blow me!! {parentObj.reagent_screen["reagentsConfigured"]}")
+        parentObj.router('dispense')
+        
         
     def addReagent(self):
         name = self.reagentName.text()

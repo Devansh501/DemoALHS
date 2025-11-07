@@ -80,9 +80,11 @@
       { "label": "Wells", "value": "96" },
       { "label": "Volume", "value": "300ul" },
       { "label": "Bottom", "value": "U-bottom" },
-      { "label": "Material", "value": "Polystyrene" }
+      { "label": "Material", "value": "Polystyrene" },
+      { "label": "Rows", "value": "8" },
+      { "label": "Columns", "value": "12" }
     ],
-    "identifiers": ["Wells", "Volume", "Bottom", "Material"]
+    "identifiers": ["Wells", "Volume", "Bottom", "Material", "Rows", "Columns"]
   },
   {
     "index": 7,
@@ -93,9 +95,11 @@
       { "label": "Wells", "value": "96" },
       { "label": "Volume", "value": "2ml" },
       { "label": "Bottom", "value": "Round" },
-      { "label": "Feature", "value": "Deep well" }
+      { "label": "Feature", "value": "Deep well" },
+      { "label": "Rows", "value": "8" },
+      { "label": "Columns", "value": "12" }
     ],
-    "identifiers": ["Wells", "Volume", "Bottom", "Feature"]
+    "identifiers": ["Wells", "Volume", "Bottom", "Feature", "Rows", "Columns"]
   },
   {
     "index": 8,
@@ -106,9 +110,11 @@
       { "label": "Wells", "value": "6" },
       { "label": "Volume", "value": "16.8ml" },
       { "label": "Bottom", "value": "Flat" },
-      { "label": "Coating", "value": "TC-Treated" }
+      { "label": "Coating", "value": "TC-Treated" },
+      { "label": "Rows", "value": "2" },
+      { "label": "Columns", "value": "3" }
     ],
-    "identifiers": ["Wells", "Volume", "Bottom", "Coating"]
+    "identifiers": ["Wells", "Volume", "Bottom", "Coating", "Rows", "Columns"]
   },
   {
     "index": 9,
@@ -119,9 +125,11 @@
       { "label": "Wells", "value": "1536" },
       { "label": "Volume", "value": "11.5ul" },
       { "label": "Bottom", "value": "Clear" },
-      { "label": "Application", "value": "High-density assays" }
+      { "label": "Application", "value": "High-density assays" },
+      { "label": "Rows", "value": "32" },
+      { "label": "Columns", "value": "48" }
     ],
-    "identifiers": ["Wells", "Volume", "Bottom", "Application"]
+    "identifiers": ["Wells", "Volume", "Bottom", "Application", "Rows", "Columns"]
   },
   {
     "index": 10,
@@ -132,9 +140,11 @@
       { "label": "Wells", "value": "96" },
       { "label": "Volume", "value": "350ul" },
       { "label": "Bottom", "value": "Solid black" },
-      { "label": "Application", "value": "Luminescence" }
+      { "label": "Application", "value": "Luminescence" },
+      { "label": "Rows", "value": "8" },
+      { "label": "Columns", "value": "12" }
     ],
-    "identifiers": ["Wells", "Volume", "Bottom", "Application"]
+    "identifiers": ["Wells", "Volume", "Bottom", "Application", "Rows", "Columns"]
   },
   {
     "index": 11,
@@ -145,9 +155,11 @@
       { "label": "Wells", "value": "384" },
       { "label": "Volume", "value": "120ul" },
       { "label": "Bottom", "value": "V-bottom" },
-      { "label": "Material", "value": "Polypropylene" }
+      { "label": "Material", "value": "Polypropylene" },
+      { "label": "Rows", "value": "16" },
+      { "label": "Columns", "value": "24" }
     ],
-    "identifiers": ["Wells", "Volume", "Bottom", "Material"]
+    "identifiers": ["Wells", "Volume", "Bottom", "Material", "Rows", "Columns"]
   },
   {
     "index": 12,

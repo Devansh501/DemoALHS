@@ -106,5 +106,8 @@ class MainWindow(QMainWindow):
             splash = AnimatedSplash()
             splash.finished.connect(lambda: self.router("home", animate=True))
             return splash
+        elif screen_name == "dispense":
+            from screens.dispense import DispenseScreen
+            return DispenseScreen(self)
         else:
             raise ValueError(f"Unknown screen: {screen_name}")
