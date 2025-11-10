@@ -3,6 +3,22 @@ from PyQt5.QtCore import  Qt
 from widgets.heading import Heading
 from widgets.button import ThemedButton
 from widgets.well_plate_selector import WellPlateSelectorWidget
+from widgets.widget_tab_container import TabbedContainer
+
+
+
+class StepAdder(QWidget):
+    def __init__(self):
+        super().__init__()
+        mainWrapper = QVBoxLayout(self)
+        mainWrapper.addWidget(Heading("Accio Thunderbolt!!!",level=6))
+        
+
+class ProtocolStepDump(QWidget):
+    def __init__(self):
+        super().__init__()
+        mainWrapperA = QVBoxLayout(self)
+        mainWrapperA.addWidget(Heading("Avada Kedavara.....",level=6))
 
 
 class DispenseScreen(QWidget):
@@ -59,12 +75,18 @@ class DispenseScreen(QWidget):
         
         mainAreaWrapperLayout.addWidget(leftAreaWrapper)
         mainAreaWrapperLayout.setAlignment(leftAreaWrapper,Qt.AlignLeft)        
-        # Mid Area
-        midAreaWrapper = QWidget()
-        midAreaWrapperLayout = QVBoxLayout(midAreaWrapper)
-        # Add your mid area widgets here
         
-        mainAreaWrapperLayout.addWidget(midAreaWrapper)
+        rightAreaWrapper = QWidget()
+        rightAreaWrapperLayout = QVBoxLayout(rightAreaWrapper)
+        
+        self.tabber = TabbedContainer()
+        
+        self.tabber.add_tab("Options",StepAdder())
+        self.tabber.add_tab("Protocols",ProtocolStepDump())
+        
+        rightAreaWrapperLayout.addWidget(self.tabber)
+        
+        mainAreaWrapperLayout.addWidget(rightAreaWrapper)
         
         # Navigation Bottom Area
         bottomWidget = QWidget()
