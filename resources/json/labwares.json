@@ -117,21 +117,6 @@
     "identifiers": ["Wells", "Volume", "Bottom", "Coating", "Rows", "Columns"]
   },
   {
-    "index": 9,
-    "type": "Well Plate",
-    "make": "Corning",
-    "name": "Costar 1536-Well Plate",
-    "details": [
-      { "label": "Wells", "value": "1536" },
-      { "label": "Volume", "value": "11.5ul" },
-      { "label": "Bottom", "value": "Clear" },
-      { "label": "Application", "value": "High-density assays" },
-      { "label": "Rows", "value": "32" },
-      { "label": "Columns", "value": "48" }
-    ],
-    "identifiers": ["Wells", "Volume", "Bottom", "Application", "Rows", "Columns"]
-  },
-  {
     "index": 10,
     "type": "Well Plate",
     "make": "PerkinElmer",
@@ -145,21 +130,6 @@
       { "label": "Columns", "value": "12" }
     ],
     "identifiers": ["Wells", "Volume", "Bottom", "Application", "Rows", "Columns"]
-  },
-  {
-    "index": 11,
-    "type": "Well Plate",
-    "make": "Thermo Fisher Scientific",
-    "name": "Microtiter Plate",
-    "details": [
-      { "label": "Wells", "value": "384" },
-      { "label": "Volume", "value": "120ul" },
-      { "label": "Bottom", "value": "V-bottom" },
-      { "label": "Material", "value": "Polypropylene" },
-      { "label": "Rows", "value": "16" },
-      { "label": "Columns", "value": "24" }
-    ],
-    "identifiers": ["Wells", "Volume", "Bottom", "Material", "Rows", "Columns"]
   },
   {
     "index": 12,

@@ -26,14 +26,14 @@ class ReagentConfiguration(QWidget):
         reagentAddWrapper = QHBoxLayout()
         
         self.reagents = []
-        self.choosenColor = QColor("ffffff")
+        self.choosenColor = QColor("000000")
          
         self.reagentName = ThemedInputField(placeholder_text="Name",size="small",numeric_only=False)
         self.reagentDescription = ThemedInputField(placeholder_text="Description",size="longsmall",numeric_only=False)
         self.addReagentBtn = ThemedButton("Add", size="small")
         self.colorBtn = QPushButton("  ")
         self.colorBtn.setFixedSize(50,28)
-        self.colorBtn.setStyleSheet("background: #ffffff; border-radius:4px;")
+        self.colorBtn.setStyleSheet("background: #000000; border-radius:4px;")
         self.colorBtn.clicked.connect(self.chooseColor)
         self.addReagentBtn.clicked.connect(self.addReagent)
         
@@ -123,7 +123,6 @@ class ReagentConfiguration(QWidget):
             "reagentsConfigured": {}
         }
         parentObj.reagent_screen["reagentsConfigured"] = self.reagents
-        print(f" blow me!! {parentObj.reagent_screen["reagentsConfigured"]}")
         parentObj.router('dispense')
         
         
@@ -141,6 +140,8 @@ class ReagentConfiguration(QWidget):
             self.reagentName.setValue("")
             self.reagentDescription.setValue("")
             self.reagentSelector.setItems(list(map(lambda x: x["reagentName"],self.reagents)))
+            self.choosenColor = QColor("ffffff")
+            self.colorBtn.setStyleSheet(f"background-color: {self.choosenColor.name()}; border-radius:4px;")
     
     def chooseColor(self):
         self.choosenColor = QColorDialog.getColor()

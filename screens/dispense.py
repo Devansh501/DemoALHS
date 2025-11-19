@@ -1,17 +1,70 @@
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout,QPushButton
 from PyQt5.QtCore import  Qt
 from widgets.heading import Heading
 from widgets.button import ThemedButton
 from widgets.well_plate_selector import WellPlateSelectorWidget
 from widgets.widget_tab_container import TabbedContainer
+from widgets.newSelector import ThemedSelector
+from widgets.numericInput import ThemedInputField
+from widgets.menu_button import MenuButton
 
 
 
 class StepAdder(QWidget):
-    def __init__(self):
+    def __init__(self, dataObj):
         super().__init__()
+        self.stepObj = {
+            "reagentName":"",
+            "reagentQuantity":"",
+        }
         mainWrapper = QVBoxLayout(self)
-        mainWrapper.addWidget(Heading("Accio Thunderbolt!!!",level=6))
+        reagentSelectorLayout = QHBoxLayout()
+        self.reagentSelector = ThemedSelector(placeholder="Add Reagent", size="small")
+        self.reagentNames = [reagent['reagentName'] for reagent in dataObj.reagent_screen["reagentsConfigured"]]
+
+        self.reagentSelector.setItems(self.reagentNames)
+        self.reagentSelector.currentTextChanged.connect(lambda x:self.reagentSelectionHandler(x,dataObj))
+        self.colorBearer = QWidget()
+        self.colorBearer.setFixedSize(50, 28)
+        
+        self.colorBearer.setStyleSheet(f"background-color: {dataObj.reagent_screen["reagentsConfigured"][0]["reagentColor"].name()}; border-radius:4px")
+        reagentSelectorLayout.addStretch(1)
+        reagentSelectorLayout.addWidget(Heading("Select Reagent",8))
+        reagentSelectorLayout.addSpacing(2)
+        reagentSelectorLayout.addWidget(self.reagentSelector)
+        reagentSelectorLayout.addSpacing(1)
+        reagentSelectorLayout.addWidget(self.colorBearer)
+        reagentSelectorLayout.addStretch(1)
+        mainWrapper.addLayout(reagentSelectorLayout)
+        
+        reagentQuantityLayout = QHBoxLayout()
+        self.reagentQuantityInput = ThemedInputField(placeholder_text="0",size="small",numeric_only=True)
+        self.reagentQuantityInput.line_edit.textChanged.connect(lambda x: self.reagentQuantityInput(x))
+        reagentQuantityLayout.addStretch(1)
+        reagentQuantityLayout.addWidget(Heading("Set Quantity",8))
+        reagentQuantityLayout.addSpacing(2)
+        reagentQuantityLayout.addWidget(self.reagentQuantityInput)
+        reagentQuantityLayout.addStretch(1)
+        mainWrapper.addLayout(reagentQuantityLayout)
+        
+        buttonLayout = QHBoxLayout()
+        addStepButton = MenuButton("Add Step",fontSize=16,btnHeight=110,btnWidth=150)
+        resetDefaults = MenuButton("Reset Defaults",fontSize=16,btnHeight=110,btnWidth=150)
+        buttonLayout.addWidget(addStepButton)
+        buttonLayout.addWidget(resetDefaults)
+        mainWrapper.addLayout(buttonLayout)
+        
+    
+    def reagentSelectionHandler(self,text,dataObj):
+        reagents_list = dataObj.reagent_screen["reagentsConfigured"]
+        color = next((r["reagentColor"] for r in reagents_list if r["reagentName"] == text), None)
+        self.colorBearer.setStyleSheet(f"background-color: {color.name()}; border-radius:4px")
+        self.stepObj["reagentName"] = text
+    
+    def reagentQuantityHandler(self,text,dataObj):
+        self.stepObj["reagentQuantity"] = text
+        
+         
         
 
 class ProtocolStepDump(QWidget):
@@ -24,7 +77,7 @@ class ProtocolStepDump(QWidget):
 class DispenseScreen(QWidget):
     def __init__(self, parentObj):
         super().__init__()
-        
+        # print(f"lol phun!! {parentObj.labware_screen}")    
         screenLayoutWrapper = QVBoxLayout(self)
         
         # Heading
@@ -38,36 +91,13 @@ class DispenseScreen(QWidget):
         leftAreaWrapper = QWidget()
         leftAreaLayout = QVBoxLayout(leftAreaWrapper)
         
-        # Sample plate data
-        sample_plates = [
-            {
-                "index": 1,
-                "type": "Well Plate",
-                "make": "PerkinElmer",
-                "name": "OptiPlate-96",
-                "details": [
-                    {"label": "Wells", "value": "96"},
-                    {"label": "Volume", "value": "350ul"},
-                    {"label": "Rows", "value": "8"},
-                    {"label": "Columns", "value": "12"}
-                ]
-            },
-            {
-                "index": 2,
-                "type": "Well Plate",
-                "make": "Corning",
-                "name": "Costar 12-Well Plate",
-                "details": [
-                    {"label": "Wells", "value": "6"},
-                    {"label": "Volume", "value": "80ul"},
-                    {"label": "Rows", "value": "3"},
-                    {"label": "Columns", "value": "2"}
-                ]
-            }
-        ]
+        self.availableWellPlates = [item for item in parentObj.labware_screen if item['type'] == 'Well Plate']
+        
+
+      
         
         # Create well plate selector
-        self.wellPlateSelector = WellPlateSelectorWidget(sample_plates)
+        self.wellPlateSelector = WellPlateSelectorWidget(self.availableWellPlates)
         self.wellPlateSelector.selectionChanged.connect(self.on_well_selection_changed)
         
         leftAreaLayout.addWidget(self.wellPlateSelector)
@@ -81,7 +111,7 @@ class DispenseScreen(QWidget):
         
         self.tabber = TabbedContainer()
         
-        self.tabber.add_tab("Options",StepAdder())
+        self.tabber.add_tab("Options",StepAdder(parentObj))
         self.tabber.add_tab("Protocols",ProtocolStepDump())
         
         rightAreaWrapperLayout.addWidget(self.tabber)
