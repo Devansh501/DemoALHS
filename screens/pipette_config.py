@@ -30,7 +30,7 @@ class PipetteConfigScreen(QWidget):
         leftAreaWidgetLayout = QVBoxLayout(leftAreaWIdget)
         pipTypeWidget = QWidget()
         pipTypeWidgetLayout = QHBoxLayout(pipTypeWidget)
-        pipTypeWidgetLayout.addWidget(Heading("Pipette Type: ", level=5))
+        pipTypeWidgetLayout.addWidget(Heading("Pipette Type: ", level=7))
         pipTypeSelector = ThemedSelector(size="small")
         pipTypeSelector.addItems(["Single Channel", "Multi Channel"])
         pipTypeSelector.setCurrentIndex(0)
@@ -39,7 +39,7 @@ class PipetteConfigScreen(QWidget):
 
         pipCapacityWidget = QWidget()
         pipCapacityWidgetLayout = QHBoxLayout(pipCapacityWidget)
-        pipCapacityWidgetLayout.addWidget(Heading("Pipette Capacity: ", level=5))
+        pipCapacityWidgetLayout.addWidget(Heading("Pipette Capacity: ", level=7))
         pipCapacitySelector = ThemedSelector(size="small")
         pipCapacitySelector.addItems(["50ul","100ul","200ul"])
         pipCapacityWidgetLayout.addWidget(pipCapacitySelector)

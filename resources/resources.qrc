@@ -19,5 +19,6 @@
 
     <qresource prefix="/images">
         <file alias="backgroundGradient.png">images/background_gradient.png</file>
+        <file alias="processLoader.gif">images/loader.gif</file>
     </qresource>
 </RCC>

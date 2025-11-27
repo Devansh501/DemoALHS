@@ -7,20 +7,21 @@ from widgets.widget_tab_container import TabbedContainer
 from widgets.newSelector import ThemedSelector
 from widgets.numericInput import ThemedInputField
 from widgets.menu_button import MenuButton
+from widgets.scroll_area import ScrollableWidget
 
 
 
 class StepAdder(QWidget):
-    def __init__(self, dataObj):
+    def __init__(self, dataObj,wrapper):
         super().__init__()
+        self.reagentNames = [reagent['reagentName'] for reagent in dataObj.reagent_screen["reagentsConfigured"]]
         self.stepObj = {
-            "reagentName":"",
+            "reagentName":self.reagentNames[0],
             "reagentQuantity":"",
         }
         mainWrapper = QVBoxLayout(self)
         reagentSelectorLayout = QHBoxLayout()
         self.reagentSelector = ThemedSelector(placeholder="Add Reagent", size="small")
-        self.reagentNames = [reagent['reagentName'] for reagent in dataObj.reagent_screen["reagentsConfigured"]]
 
         self.reagentSelector.setItems(self.reagentNames)
         self.reagentSelector.currentTextChanged.connect(lambda x:self.reagentSelectionHandler(x,dataObj))
@@ -39,7 +40,7 @@ class StepAdder(QWidget):
         
         reagentQuantityLayout = QHBoxLayout()
         self.reagentQuantityInput = ThemedInputField(placeholder_text="0",size="small",numeric_only=True)
-        self.reagentQuantityInput.line_edit.textChanged.connect(lambda x: self.reagentQuantityInput(x))
+        self.reagentQuantityInput.line_edit.textChanged.connect(lambda x: self.reagentQuantityHandler(x))
         reagentQuantityLayout.addStretch(1)
         reagentQuantityLayout.addWidget(Heading("Set Quantity",8))
         reagentQuantityLayout.addSpacing(2)
@@ -48,11 +49,17 @@ class StepAdder(QWidget):
         mainWrapper.addLayout(reagentQuantityLayout)
         
         buttonLayout = QHBoxLayout()
-        addStepButton = MenuButton("Add Step",fontSize=16,btnHeight=110,btnWidth=150)
-        resetDefaults = MenuButton("Reset Defaults",fontSize=16,btnHeight=110,btnWidth=150)
+        addStepButton = MenuButton("Add Step",fontSize=12,btnHeight=110,btnWidth=150)
+        addStepButton.clicked.connect(lambda : self.handleAddStep(wrapper))
+        resetDefaults = MenuButton("Reset Defaults",fontSize=12,btnHeight=110,btnWidth=150)
         buttonLayout.addWidget(addStepButton)
         buttonLayout.addWidget(resetDefaults)
         mainWrapper.addLayout(buttonLayout)
+    
+    def handleAddStep(self,wrapper):
+        wrapper.steps.append(self.stepObj)
+        self.reagentQuantityInput.setValue("")
+        wrapper.wellPlateSelector.clear_all_selections()
         
     
     def reagentSelectionHandler(self,text,dataObj):
@@ -61,7 +68,7 @@ class StepAdder(QWidget):
         self.colorBearer.setStyleSheet(f"background-color: {color.name()}; border-radius:4px")
         self.stepObj["reagentName"] = text
     
-    def reagentQuantityHandler(self,text,dataObj):
+    def reagentQuantityHandler(self,text):
         self.stepObj["reagentQuantity"] = text
         
          
@@ -71,7 +78,9 @@ class ProtocolStepDump(QWidget):
     def __init__(self):
         super().__init__()
         mainWrapperA = QVBoxLayout(self)
-        mainWrapperA.addWidget(Heading("Avada Kedavara.....",level=6))
+        mainWrapperA.addWidget(Heading("Protocol",level=8))
+        self.scrollStepArea = ScrollableWidget()
+        
 
 
 class DispenseScreen(QWidget):
@@ -110,8 +119,9 @@ class DispenseScreen(QWidget):
         rightAreaWrapperLayout = QVBoxLayout(rightAreaWrapper)
         
         self.tabber = TabbedContainer()
+        self.steps = []
         
-        self.tabber.add_tab("Options",StepAdder(parentObj))
+        self.tabber.add_tab("Options",StepAdder(parentObj,self))
         self.tabber.add_tab("Protocols",ProtocolStepDump())
         
         rightAreaWrapperLayout.addWidget(self.tabber)
@@ -136,4 +146,3 @@ class DispenseScreen(QWidget):
     def on_well_selection_changed(self, selection_data):
         """Handle well selection changes"""
         print("Selection changed:", selection_data)
-        # Process the selection data as needed
